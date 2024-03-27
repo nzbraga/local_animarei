@@ -38,12 +38,12 @@ export const loadUserData = async (name, password) => {
         return user;
       }
     } else {
-      console.log("Não há dados do usuário armazenados localmente.");
-      return null;
+      console.log("Não há dados do usuário armazenados localmente.");      
+      return Alert.alert("Usuario não encontrado")
     }
   } catch (error) {
     console.error('Erro ao carregar os dados do usuário:', error);
-    return null;
+    return Alert.alert("Erro ao carregar os dados do usuário!")
   }
 };
 

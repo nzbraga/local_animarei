@@ -17,8 +17,8 @@ const Header = ( {page} ) => {
     Alert.alert('LogOut','Deseja deslogar?',
       [{ text: 'Yes', onPress: () => 
         {
-          logOut()
           navigation.navigate("Login")
+          logOut()
         }
       },{ text: 'No' },],
       { cancelable: false }      
@@ -35,7 +35,7 @@ const Header = ( {page} ) => {
 
   useEffect(()=>{ 
       handleLogged()
-  }, [user.name])
+  }, [])
       
 
   return (

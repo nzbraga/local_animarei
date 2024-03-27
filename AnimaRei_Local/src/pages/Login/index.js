@@ -4,9 +4,9 @@ import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-nat
 
 import { useNavigation } from '@react-navigation/native'
 
-import { storageLoginData, loadUserData , loadLoginData, storageUserData } from "../../service/local/user";
-
-import { styles } from './style'
+import { storageLoginData, loadUserData , loadLoginData} from "../../service/local/user";
+import styles from './style'
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
 
@@ -18,14 +18,13 @@ const Login = () => {
   const navigation = useNavigation()
 
 
-  // crirar um localStorage com nome 'logado', que contem o nome do usuario
   const handleLogin = async (name , password) => {
      await loadUserData(name ,password).then((res)=>{
       //console.log("hanldelogin-",res)
       
       if(password === res.password){
         storageLoginData(name).then(()=>{
-          navigation.navigate('Home', user)
+          navigation.navigate('Home')
         })
       }
       
@@ -44,9 +43,10 @@ const Login = () => {
     })
   }
 
-  useEffect(() => {     
-      //verificar se ha alguem logado
+  useEffect(() => {  
       handleLogged()
+      //apagar local storage pra testes
+      //AsyncStorage.clear()
   }, [user])
 
 

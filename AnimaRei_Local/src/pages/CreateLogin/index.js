@@ -4,7 +4,7 @@ import { View, Text, TextInput, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import { styles } from "./style";
 
-import { storageUserData } from "../../service/local/user";
+import { storageUserData, storageLoginData } from "../../service/local/user";
 import validationUser from "../../service/validation/user";
 
 export default function CreateLogin() {
@@ -19,9 +19,11 @@ export default function CreateLogin() {
    
     await validationUser(name, password, passwordConfirm).then((res)=>{
       if(res){
-       console.log("handleCreateres - user", res)
+       //console.log("handleCreate - user", res)
         storageUserData(res.name, res.password).then(()=>{
-          navigation.navigate('Login')
+          storageLoginData(res.name).then(()=>{
+            navigation.navigate('Home')
+          })
         }).catch((error)=>{
           console.log("handleCreateUser - stogareUserDatahhh". error)
         })      

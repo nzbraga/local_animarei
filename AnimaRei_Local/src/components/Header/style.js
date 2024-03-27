@@ -60,7 +60,7 @@ export default StyleSheet.create({
     alignContent:"center"
   },
   headerName: {
-    fontSize: 10,     
+    fontSize: 18,     
     fontWeight: 'bold',
     paddingLeft: 5,
     color: colors.darkPry

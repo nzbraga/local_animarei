@@ -2,38 +2,40 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { loadUserData } from "../../service/local/user";
+import { loadLoginData } from "../../service/local/user";
 import { storageFavoriteData } from "../../service/local/favorite";
 
 import styles from "./style";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AnimeList({ data }) {
 
   const navigation = useNavigation()
 
-  const [user, setUser] = useState({})  
+  const [user, setUser] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
-  async function handleLoginData() {
-    const newUser = await loadUserData();
-    setUser(newUser);
-  }
+  async function handleAnimeFav(userName, title, images, episodes) {
 
+    const currentEpisode = 0
+    const note = ''
 
-
-  async function handleAnimeFav(title, images, description, userId, episodes, token) {
-
-    const res = await createFavorite(title, images, description, userId, episodes, token)
-    const favoriteData = res.favorite
+    const favoriteData = { title, images, episodes, note, currentEpisode }
 
     if (favoriteData) {
-      storageFavoriteData(favoriteData)
+      storageFavoriteData(userName, favoriteData).then((res) => {
+      });
     }
-    if (res.error) {
-      Alert.alert(res.error)
-    }
+
   }
 
+  const handleLogged = async () => {
+    await loadLoginData()
+  }
+
+  useEffect(() => {
+    handleLogged()
+  }, [user])
 
   const renderItem = ({ item }) => (
     <>
@@ -53,18 +55,16 @@ function AnimeList({ data }) {
             </>
             :
             <>
-              <Text> OVA / Filme </Text>
+              <Text style={styles.episodeText}> OVA / Filme </Text>
             </>}
 
 
 
           <TouchableOpacity onPress={() => handleAnimeFav(
+            user.name,
             item.title,
             item.images.jpg.large_image_url,
-            item.synopsis,
-            user.id,
             item.episodes,
-            user.token
 
           )} style={styles.starContainer}>
             <Text style={styles.starIcon}>🤍</Text>

@@ -1,61 +1,143 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, FlatList, Alert } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Image, Pressable } from 'react-native';
+import { loadFavoriteData, upFavorite } from '../../service/local/favorite';
+import * as Progress from 'react-native-progress';
 
-import { loadUserData } from '../../service/local/user'
+import styles from './style';
+import { colors } from '../colors';
 
-import { styles } from './style'
+const Favorites = ({ user }) => {
 
-const Favorites = () => {
-  const [user, setUser] = useState({});
   const [lists, setLists] = useState([]);
-
-  async function handleFavoriteData(userId){
-    try {
-      const res = await listFavorites(userId);
-      setLists(res);
-    } catch (error) {
-      console.error('Error ao buscar favorites:', error);
-      // Você pode exibir uma mensagem de erro para o usuário aqui
-    }
-  }
   
-  async function handleLoginData(){
-    try {
-      const newUser = await loadUserData();     
-      setUser(newUser);    
-    } catch (error) {
-      console.error('Error ao buscar user data:', error);
-      // Você pode exibir uma mensagem de erro para o usuário aqui
+  useEffect(() => {
+    if(user){
+      const userName = user.name;
+      if(lists.length === 0){
+        handleFavoriteData(userName);
+      }
     }
+  }, [user]);
+
+  function handleFavoriteData(name) {
+    loadFavoriteData(name).then((res) => {
+      if (res) {
+        setLists(res.map(item => ({ ...item, hideMenu: false })));
+      }
+    });
   }
-  
-  useEffect(() => {  
-    if(!user.name){        
-      handleLoginData();             
-    }    
-  }, [user])
 
-  useEffect(() => {            
-    if(user.id) {
-      handleFavoriteData(user.id);
-    }
-  }, [user.id])
+  async function handleUpFavorite(name,id,action){
+    await upFavorite(name,id,action).then((res)=>{
+      console.log("handleUpFav -- ", res)
+    })
+  }
 
-  // Renderizar o item da lista
-  const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text>{item.title}</Text>
-      {/* Outros dados do item */}
-    </View>
-  );
+  function handleProgress(current, total) {
+    const currentNumber = Number(current);
+    const totalNumber = Number(total);
+    const progress = currentNumber / totalNumber;
+    return progress;
+  }
 
+  function toggleMenu(index) {
+    setLists(prevLists => {
+      return prevLists.map((list, i) => {
+        if (i === index) {
+          return { ...list, hideMenu: !list.hideMenu };
+        }
+        return list;
+      });
+    });
+  }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favorites</Text>
       <FlatList
         data={lists}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <View style={styles.itemContainer}>
+
+            <Image source={{ uri: item.images }} style={styles.image} />
+            {!item.hideMenu ?
+              <View style={styles.hideMenu}>
+               <Pressable onPress={() => toggleMenu(index)}>
+                  <Text style={styles.textHideMenu}>☰</Text>
+                </Pressable>
+              </View> : 
+             
+                <View style={styles.buttonContainer}>
+              
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {handleUpFavorite(userName,index, 'note') }}>
+                  <Text style={styles.buttonText}>📖</Text>
+                </Pressable>
+
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {handleUpFavorite(userName,index, 'edit') }}>
+                  <Text style={styles.buttonText}>✍️</Text>
+                </Pressable>
+
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {handleUpFavorite(userName,index, 'complite') }}>
+                  <Text style={styles.buttonText}>✅</Text>
+                </Pressable>
+
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {handleUpFavorite(userName,index, 'clear') }}>
+                  <Text style={styles.buttonText}>⬜️</Text>
+                </Pressable>
+
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {handleUpFavorite(userName,index,'delete') }}>
+                  <Text style={styles.buttonClose}>X</Text>
+                </Pressable>
+
+                <Pressable
+                  style={styles.button}
+                  onPress={() => toggleMenu(index)}>
+                  <Text style={styles.buttonText}>☰</Text>
+                </Pressable>
+                
+              
+              </View>
+
+            }
+
+
+            <View style={styles.textContainer}>
+              <Text style={styles.titleText}>{item.title}</Text>
+              <View style={styles.progressBox}>
+              <Pressable style={styles.buttonSide}
+                  onPress={() => {handleUpFavorite(userName,index, '-') }}
+                >
+                  <Text style={styles.buttonSideText}>-</Text>
+                </Pressable>
+                <Progress.Bar
+                  style={styles.progress}
+                  progress={handleProgress(item.currentEpisode, item.episodes)}
+                  color={colors.primary}
+                  height={30}
+                  width={300}
+                />
+                <Pressable
+                  style={styles.buttonSide}
+                  onPress={() => {handleUpFavorite(userName,index, '+') }} >
+                  <Text style={styles.buttonSideText}>+</Text>
+                </Pressable>
+              </View>
+                <Text style={styles.titleBar}>
+                  {item.currentEpisode} / {item.episodes}
+                </Text>
+
+            </View>
+          </View>
+        )}
       />
     </View>
   );

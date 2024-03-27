@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Pressable, Text, ActivityIndicator } from "react-native";
+import { View, TextInput, Pressable, Text, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -21,7 +21,7 @@ function API() {
 
   const handleSearch = () => {
     if (search === '') {
-      alert('insira o nome de um anime')
+      Alert.alert('insira o nome de um anime')
     }
     getData();
   };
@@ -39,7 +39,6 @@ function API() {
   useEffect(() => {
     getData();
   }, []);
-
 
   return (
 
@@ -60,7 +59,7 @@ function API() {
         </View>
 
       </View>
-    
+      {data.length === null || data.length === undefined ? <><Text style={{color:'white'}}>oi</Text></>:
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
           <AnimeList            
@@ -68,6 +67,7 @@ function API() {
           />
         }
       </View>
+  }
     </View>
   )
 }
