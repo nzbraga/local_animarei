@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import UserContext from '../../pages/UserContext'
 import { loadLoginData } from "../../service/local/user";
 import { storageFavoriteData } from "../../service/local/favorite";
+
 
 import styles from "./style";
 //import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AnimeList({ data }) {
+  
 
-  const navigation = useNavigation()
-
-  const [user, setUser] = useState({})
+  const { user } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(false)
-
+ 
   async function handleAnimeFav(userName, title, images, episodes) {
-
+    //console.log("handleFAv:", userName)
     const currentEpisode = 0
     const note = ''
 
@@ -28,15 +29,7 @@ function AnimeList({ data }) {
     }
 
   }
-
-  const handleLogged = async () => {
-    await loadLoginData()
-  }
-
-  useEffect(() => {
-    handleLogged()
-  }, [user])
-
+ 
   const renderItem = ({ item }) => (
     <>
 
@@ -61,7 +54,7 @@ function AnimeList({ data }) {
 
 
           <TouchableOpacity onPress={() => handleAnimeFav(
-            user.name,
+            user,
             item.title,
             item.images.jpg.large_image_url,
             item.episodes,

@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Image, Pressable } from 'react-native';
-import { loadFavoriteData, upFavorite } from '../../service/local/favorite';
 import * as Progress from 'react-native-progress';
 
+import { loadFavoriteData, upFavorite, allKeys } from '../../service/local/favorite';
+import UserContext from '../../pages/UserContext';
 import styles from './style';
 import { colors } from '../colors';
 
-const Favorites = ({ user }) => {
+const Favorites = () => {
 
+  const { user, setUser } = useContext(UserContext)
   const [lists, setLists] = useState([]);
   
-  useEffect(() => {
-    if(user){
-      const userName = user.name;
+  useEffect(() => {        
       if(lists.length === 0){
-        handleFavoriteData(userName);
+        handleFavoriteData(user);
       }
-    }
-  }, [user]);
+    }, [lists]);
 
   function handleFavoriteData(name) {
     loadFavoriteData(name).then((res) => {
@@ -127,7 +126,7 @@ const Favorites = ({ user }) => {
                 />
                 <Pressable
                   style={styles.buttonSide}
-                  onPress={() => {handleUpFavorite(userName,index, '+') }} >
+                  onPress={() => {allKeys()}} >
                   <Text style={styles.buttonSideText}>+</Text>
                 </Pressable>
               </View>

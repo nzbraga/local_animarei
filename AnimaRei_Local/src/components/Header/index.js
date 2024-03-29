@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View, Pressable, Text, Image, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { loadLoginData, logOut } from '../../service/local/user';
+
+import UserContext from '../../pages/UserContext';
 
 import styles from './style';
  
@@ -10,7 +12,7 @@ const Header = ( {page} ) => {
 
   const navigation = useNavigation()
  
-  const [user, setUser] = useState({})
+  const { user } = useContext(UserContext)
 
 
   function handleLogOut(){
@@ -26,17 +28,6 @@ const Header = ( {page} ) => {
    
   }
 
-  async function handleLogged(){
-    await loadLoginData().then((res)=>{
-      //console.log("header handleLogged: ",res)
-      setUser(res)
-    })
-  }
-
-  useEffect(()=>{ 
-      handleLogged()
-  }, [])
-      
 
   return (
 
@@ -49,7 +40,7 @@ const Header = ( {page} ) => {
           source={require('../img/icon-anima.jpg')}
         />
       
-          <Text style={styles.headerName}>{user.name}</Text>
+          <Text style={styles.headerName}>{user}</Text>
       </View>
 
       <View style={styles.nav}>

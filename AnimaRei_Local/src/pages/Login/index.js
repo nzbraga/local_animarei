@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
+import styles from './style'
 
+import UserContext from '../UserContext'
 import { useNavigation } from '@react-navigation/native'
 
 import { storageLoginData, loadUserData , loadLoginData} from "../../service/local/user";
-import styles from './style'
-//import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 
 const Login = () => {
 
-  const [user, setUser] = useState({})
+  const { user, setUser } = useContext(UserContext)
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
 
@@ -18,33 +21,36 @@ const Login = () => {
   const navigation = useNavigation()
 
 
+  //logica de login
   const handleLogin = async (name , password) => {
      await loadUserData(name ,password).then((res)=>{
       //console.log("hanldelogin-",res)
       
       if(password === res.password){
+        setUser(name)
         storageLoginData(name).then(()=>{
           navigation.navigate('Home')
         })
       }
-      
-
      }).catch((error)=>{
       console.error("Erro ao logar: ", error)
      })
   }
+
+
   //verificar se ha alguem logado
   const handleLogged = async () => {
     await loadLoginData().then((res)=>{
       //console.log("hanleLogged: ",res)
       if(res){
+        setUser(res.name)
         navigation.navigate('Home')
       }
     })
   }
 
-  useEffect(() => {  
-      handleLogged()
+  useEffect(() => { 
+      handleLogged() 
       //apagar local storage pra testes
       //AsyncStorage.clear()
   }, [user])

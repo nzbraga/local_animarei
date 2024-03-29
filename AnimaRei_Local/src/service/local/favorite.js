@@ -61,3 +61,34 @@ export const upFavorite = async (user, id, action) => {
   }
 };
 
+export const allKeys = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    console.log(keys)
+    return keys;
+  } catch (error) {
+    console.error('Error fetching keys from AsyncStorage:', error);
+    return [];
+  }
+};
+
+
+export const removeItemById = async (id) => {
+  try {
+    // Recuperar todos os itens armazenados
+    const allItems = await AsyncStorage.getAllKeys();
+
+    // Filtrar o item com base no ID fornecido
+    const itemToRemoveKey = allItems.find(key => key.includes(id));
+
+    if (itemToRemoveKey) {
+      // Remover o item
+      await AsyncStorage.removeItem(itemToRemoveKey);
+      console.log('Item removido com sucesso:', itemToRemoveKey);
+    } else {
+      console.log('Nenhum item encontrado com o ID:', id);
+    }
+  } catch (error) {
+    console.error('Erro ao remover o item:', error);
+  }
+};

@@ -7,7 +7,8 @@ import API from '../../components/API'
 import { styles } from './style'
 
 const Home = () => {
-    
+  
+
   return (
     <View style={styles.container} >
       <StatusBar/>    

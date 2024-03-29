@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TextInput, Pressable, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native'
 import { styles } from "./style";
 
+import UserContext from "../UserContext";
 import { storageUserData, storageLoginData } from "../../service/local/user";
 import validationUser from "../../service/validation/user";
 
 export default function CreateLogin() {
 
   const navigation = useNavigation()
+
+  const { user, setUser } = useContext(UserContext)
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -22,6 +25,7 @@ export default function CreateLogin() {
        //console.log("handleCreate - user", res)
         storageUserData(res.name, res.password).then(()=>{
           storageLoginData(res.name).then(()=>{
+            setUser(res.name)
             navigation.navigate('Home')
           })
         }).catch((error)=>{
