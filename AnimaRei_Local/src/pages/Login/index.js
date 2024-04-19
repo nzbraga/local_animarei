@@ -9,20 +9,17 @@ import { useNavigation } from '@react-navigation/native'
 import { storageLoginData, loadUserData , loadLoginData} from "../../service/local/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-
 const Login = () => {
 
   const { user, setUser } = useContext(UserContext)
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-
  
   const navigation = useNavigation()
 
-
   //logica de login
   const handleLogin = async (name , password) => {
+    
      await loadUserData(name ,password).then((res)=>{
       //console.log("hanldelogin-",res)
       
@@ -33,10 +30,9 @@ const Login = () => {
         })
       }
      }).catch((error)=>{
-      console.error("Erro ao logar: ", error)
+      //console.error("Erro ao logar: ", error)
      })
   }
-
 
   //verificar se ha alguem logado
   const handleLogged = async () => {
@@ -55,9 +51,7 @@ const Login = () => {
       //AsyncStorage.clear()
   }, [user])
 
-
   return (
-
 
     <View style={styles.container}>
 

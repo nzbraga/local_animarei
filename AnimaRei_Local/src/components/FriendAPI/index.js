@@ -35,6 +35,7 @@ function API() {
         </View>
 
       </View>
+          <Text style={{color:'white', margin:30, fontSize:40, textAlign:'center'}}> EM BREVE! </Text>
    { /*
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :

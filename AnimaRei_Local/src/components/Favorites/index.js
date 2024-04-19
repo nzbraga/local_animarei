@@ -2,24 +2,38 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Image, Pressable } from 'react-native';
 import * as Progress from 'react-native-progress';
 
-import { loadFavoriteData, upFavorite, allKeys } from '../../service/local/favorite';
+import { loadFavoriteData, upFavorite } from '../../service/local/favorite';
+import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../pages/UserContext';
+
+
 import styles from './style';
 import { colors } from '../colors';
 
 const Favorites = () => {
+  
+  const navigation = useNavigation()
 
   const { user, setUser } = useContext(UserContext)
-  const [lists, setLists] = useState([]);
+  const [ lists, setLists ] = useState([]);
   
   useEffect(() => {        
       if(lists.length === 0){
         handleFavoriteData(user);
       }
-    }, [lists]);
+    }, []);
+    
+    
 
-  function handleFavoriteData(name) {
-    loadFavoriteData(name).then((res) => {
+    function handleDetails(id, title, image, note,  current, episodes){
+      const detailsData = {id, title, image, note,  current, episodes}
+      //console.log("handleDetails ",detailsData)
+      navigation.navigate('Details', {detailsData})
+    }
+
+    function handleFavoriteData(name) {
+      loadFavoriteData(name).then((res) => {
+      //console.log("handle fav data",res)
       if (res) {
         setLists(res.map(item => ({ ...item, hideMenu: false })));
       }
@@ -28,7 +42,8 @@ const Favorites = () => {
 
   async function handleUpFavorite(name,id,action){
     await upFavorite(name,id,action).then((res)=>{
-      console.log("handleUpFav -- ", res)
+     // console.log("handleUpFav -- ", res)
+      handleFavoriteData(name)
     })
   }
 
@@ -49,11 +64,13 @@ const Favorites = () => {
       });
     });
   }
+
+  
   return (
     <View style={styles.container}>
       <FlatList
         data={lists}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => (item.id ?? index).toString()}
         renderItem={({ item, index }) => (
           <View style={styles.itemContainer}>
 
@@ -67,33 +84,28 @@ const Favorites = () => {
              
                 <View style={styles.buttonContainer}>
               
+            
                 <Pressable
                   style={styles.button}
-                  onPress={() => {handleUpFavorite(userName,index, 'note') }}>
-                  <Text style={styles.buttonText}>📖</Text>
-                </Pressable>
-
-                <Pressable
-                  style={styles.button}
-                  onPress={() => {handleUpFavorite(userName,index, 'edit') }}>
+                  onPress={() => {handleDetails(index, item.title, item.images ,item.note,  item.currentEpisode, item.episodes)}}>
                   <Text style={styles.buttonText}>✍️</Text>
                 </Pressable>
 
                 <Pressable
                   style={styles.button}
-                  onPress={() => {handleUpFavorite(userName,index, 'complite') }}>
+                  onPress={() => {handleUpFavorite(user,index, 'complite') }}>
                   <Text style={styles.buttonText}>✅</Text>
                 </Pressable>
 
                 <Pressable
                   style={styles.button}
-                  onPress={() => {handleUpFavorite(userName,index, 'clear') }}>
+                  onPress={() => {handleUpFavorite(user,index, 'clear') }}>
                   <Text style={styles.buttonText}>⬜️</Text>
                 </Pressable>
 
                 <Pressable
                   style={styles.button}
-                  onPress={() => {handleUpFavorite(userName,index,'delete') }}>
+                  onPress={() => {handleUpFavorite(user,index, 'delete') }}>
                   <Text style={styles.buttonClose}>X</Text>
                 </Pressable>
 
@@ -113,10 +125,11 @@ const Favorites = () => {
               <Text style={styles.titleText}>{item.title}</Text>
               <View style={styles.progressBox}>
               <Pressable style={styles.buttonSide}
-                  onPress={() => {handleUpFavorite(userName,index, '-') }}
+                  onPress={() => {handleUpFavorite(user,index, '-') }}
                 >
                   <Text style={styles.buttonSideText}>-</Text>
                 </Pressable>
+
                 <Progress.Bar
                   style={styles.progress}
                   progress={handleProgress(item.currentEpisode, item.episodes)}
@@ -124,9 +137,10 @@ const Favorites = () => {
                   height={30}
                   width={300}
                 />
+                
                 <Pressable
                   style={styles.buttonSide}
-                  onPress={() => {allKeys()}} >
+                  onPress={() => {handleUpFavorite(user,index, '+') }}>
                   <Text style={styles.buttonSideText}>+</Text>
                 </Pressable>
               </View>

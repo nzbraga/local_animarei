@@ -59,7 +59,7 @@ function API() {
         </View>
 
       </View>
-      {data.length === null || data.length === undefined ? <><Text style={{color:'white'}}>oi</Text></>:
+      {data.length === null || data.length === undefined ? <></>:
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
           <AnimeList            

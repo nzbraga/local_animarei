@@ -48,6 +48,7 @@ export default StyleSheet.create({
     right: 10,
   },
   starIcon: {
-    
+    fontSize:90,
+    color:'white'
   },
 });

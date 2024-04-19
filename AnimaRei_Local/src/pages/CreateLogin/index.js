@@ -12,7 +12,7 @@ export default function CreateLogin() {
 
   const navigation = useNavigation()
 
-  const { user, setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')

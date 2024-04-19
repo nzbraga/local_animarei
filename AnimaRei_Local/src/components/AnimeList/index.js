@@ -1,27 +1,35 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import UserContext from '../../pages/UserContext'
-import { loadLoginData } from "../../service/local/user";
-import { storageFavoriteData } from "../../service/local/favorite";
 
+import { storageFavoriteData } from "../../service/local/favorite";
 
 import styles from "./style";
 //import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AnimeList({ data }) {
-  
 
   const { user } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(false)
- 
+
   async function handleAnimeFav(userName, title, images, episodes) {
+
     //console.log("handleFAv:", userName)
     const currentEpisode = 0
     const note = ''
 
-    const favoriteData = { title, images, episodes, note, currentEpisode }
+    if (episodes === null) {
+      episodes = 1
+      let favoriteData = { title, images, episodes, note, currentEpisode }
+
+      if (favoriteData) {
+        storageFavoriteData(userName, favoriteData).then((res) => {
+        });
+      }
+    }
+
+    let favoriteData = { title, images, episodes, note, currentEpisode }
 
     if (favoriteData) {
       storageFavoriteData(userName, favoriteData).then((res) => {
@@ -29,7 +37,7 @@ function AnimeList({ data }) {
     }
 
   }
- 
+
   const renderItem = ({ item }) => (
     <>
 
@@ -60,7 +68,8 @@ function AnimeList({ data }) {
             item.episodes,
 
           )} style={styles.starContainer}>
-            <Text style={styles.starIcon}>🤍</Text>
+
+            <Text>🤍</Text>
           </TouchableOpacity>
 
         </View>
@@ -78,7 +87,8 @@ function AnimeList({ data }) {
           <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={(item) => item.mal_id.toString()}
+            keyExtractor={(item, index) => (item.id ?? index).toString()}
+
           />
         </View>
       }

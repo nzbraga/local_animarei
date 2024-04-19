@@ -3,16 +3,17 @@ import { colors } from "../colors";
 
 export default StyleSheet.create({
   container: {
-   marginTop:10
-    
+    flex: 1,
+   marginTop:10 ,
+   height:"100%"
+   
   }, 
   itemContainer: {
-    marginBottom: 15,   
+    marginBottom: 15 ,    
     
   }, 
   image: {
-    zIndex:-1,
-    alignSelf: "center",    
+    alignSelf: "center",
     width: '95%',
     height: 200,    
     borderTopRightRadius: 10,
@@ -28,7 +29,7 @@ export default StyleSheet.create({
     paddingBottom:10,
     backgroundColor: '(rgba(0,0,0,0.6))',   
     borderBottomWidth:1,
-    borderBottomColor: colors.primary
+    borderBottomColor: colors.primary,   
   },  
   titleText:{
     fontSize: 20,
@@ -62,8 +63,7 @@ export default StyleSheet.create({
     textAlign:"center",    
     margin:6,
     color: colors.backPry 
-  }, 
- 
+  },  
   buttonClose: {  
     marginTop:7,
     fontSize: 24,
@@ -75,14 +75,15 @@ export default StyleSheet.create({
     alignSelf: "center",
     flexDirection: "row", 
     width:"95%",
-    justifyContent:"space-around", 
-      
+    justifyContent:"space-around",       
   },  
   buttonSide: {        
     borderRadius: 25,
     width: 30,
     height:30, 
-    margin:5,                 
+    margin:5,    
+    alignSelf: "center",
+    textAlign: "center",             
     backgroundColor: '(rgba(0,0,0,0.7))',
   }, 
   buttonSideText: {  
@@ -112,6 +113,7 @@ export default StyleSheet.create({
   progressBox:{
     flexDirection: "row", 
     alignSelf: "center",
+    height: 30
   },
   progress:{    
     backgroundColor: colors.backPry   
