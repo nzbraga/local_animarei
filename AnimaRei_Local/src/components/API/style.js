@@ -40,5 +40,15 @@ export default StyleSheet.create({
     },
     loading:{
       margin:20,     
+    },
+    att:{
+      fontSize:20,
+      marginTop:30,
+      textAlign:'center',
+      color: colors.backSec
+    },
+    textAtt:{
+      textAlign:'center',
+      color: colors.backSec
     }
   })

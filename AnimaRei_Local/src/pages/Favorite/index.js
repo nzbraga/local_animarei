@@ -3,6 +3,7 @@ import { View, StatusBar } from 'react-native'
 
 import Header from '../../components/Header'
 import Favorites from '../../components/Favorites'
+import Version from '../../components/Version'
 
 import { styles } from './style'
 
@@ -16,6 +17,7 @@ const Favorite = () => {
       <StatusBar />
       <Header page='Favorite'/>
       <Favorites/>
+      <Version/>
     </View>
   )
   

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, Image, Pressable } from 'react-native';
+import { View, Text, FlatList, Image, Pressable, Alert } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import { loadFavoriteData, upFavorite } from '../../service/local/favorite';
@@ -16,28 +16,38 @@ const Favorites = () => {
 
   const { user, setUser } = useContext(UserContext)
   const [ lists, setLists ] = useState([]);
-  
-  useEffect(() => {        
-      if(lists.length === 0){
-        handleFavoriteData(user);
-      }
-    }, []);
     
-    
-
-    function handleDetails(id, title, image, note,  current, episodes){
-      const detailsData = {id, title, image, note,  current, episodes}
-      //console.log("handleDetails ",detailsData)
-      navigation.navigate('Details', {detailsData})
+  useEffect(() => {  
+    if(lists.length === 0){
+      handleFavoriteData(user);
     }
+  }, [lists]);
 
-    function handleFavoriteData(name) {
-      loadFavoriteData(name).then((res) => {
+  function handleDetails(id, title, image, note, current, episodes){
+    const detailsData = {id, title, image, note, current, episodes, handleFavoriteData}
+    navigation.navigate('Details', { detailsData });
+  }
+
+  function handleFavoriteData(name) {
+    loadFavoriteData(name).then((res) => {
       //console.log("handle fav data",res)
       if (res) {
         setLists(res.map(item => ({ ...item, hideMenu: false })));
       }
     });
+  }
+
+  
+  function handleDeleteFavoriteData(user, id, action){
+    Alert.alert('Excluir','Deseja Remover o anime da lista?',
+      [{ text: 'Yes', onPress: () => 
+        {
+          handleUpFavorite(user,id, action)
+        }
+      },{ text: 'No' },],
+      { cancelable: false }      
+    );
+   
   }
 
   async function handleUpFavorite(name,id,action){
@@ -68,6 +78,7 @@ const Favorites = () => {
   
   return (
     <View style={styles.container}>
+      
       <FlatList
         data={lists}
         keyExtractor={(item, index) => (item.id ?? index).toString()}
@@ -76,11 +87,12 @@ const Favorites = () => {
 
             <Image source={{ uri: item.images }} style={styles.image} />
             {!item.hideMenu ?
-              <View style={styles.hideMenu}>
+
+              <View style={styles.hideMenu}>                         
                <Pressable onPress={() => toggleMenu(index)}>
                   <Text style={styles.textHideMenu}>☰</Text>
                 </Pressable>
-              </View> : 
+              </View> :
              
                 <View style={styles.buttonContainer}>
               
@@ -105,7 +117,7 @@ const Favorites = () => {
 
                 <Pressable
                   style={styles.button}
-                  onPress={() => {handleUpFavorite(user,index, 'delete') }}>
+                  onPress={() => {handleDeleteFavoriteData(user, index, 'delete') }}>
                   <Text style={styles.buttonClose}>X</Text>
                 </Pressable>
 
@@ -122,7 +134,8 @@ const Favorites = () => {
 
 
             <View style={styles.textContainer}>
-              <Text style={styles.titleText}>{item.title}</Text>
+              <Text style={styles.titleText}>{item.title}</Text>              
+              {item.note === '' ? <></>:<Text style={styles.textNote}>Anotação: {item.note}</Text>}
               <View style={styles.progressBox}>
               <Pressable style={styles.buttonSide}
                   onPress={() => {handleUpFavorite(user,index, '-') }}
@@ -152,6 +165,7 @@ const Favorites = () => {
           </View>
         )}
       />
+  
     </View>
   );
 };

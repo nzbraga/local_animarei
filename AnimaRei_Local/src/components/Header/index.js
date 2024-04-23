@@ -28,20 +28,22 @@ const Header = ( {page} ) => {
    
   }
 
-
+  
   return (
 
     <View style={styles.header}>
 
-      <View style={styles.user}>
-        
+      <Pressable style={styles.user}
+      onPress={() => navigation.navigate('Perfil')}
+      >   
         <Image
           style={styles.image}
           source={require('../img/icon-anima.jpg')}
         />
       
           <Text style={styles.headerName}>{user}</Text>
-      </View>
+          
+      </Pressable>
 
       <View style={styles.nav}>
 

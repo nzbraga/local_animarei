@@ -4,7 +4,7 @@
     "slug": "AnimaRei_Local",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -22,7 +22,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nzbraga.AnimaRei_Local"
+      "package": "com.nzbraga.AnimaRei_Local",
+      "packageType": "apk"  
     },
     "web": {
       "favicon": "./assets/favicon.png"

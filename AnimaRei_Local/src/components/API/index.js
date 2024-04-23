@@ -59,7 +59,23 @@ function API() {
         </View>
 
       </View>
-      {data.length === null || data.length === undefined ? <></>:
+      {data.length === null || data.length === undefined ? 
+      <>
+      <Text style={styles.att}>Notas de Atualização:</Text>
+      <Text style={styles.textAtt}></Text>
+      <Text style={styles.textAtt}> CORREÇÕES:</Text>
+      <Text style={styles.textAtt}>- limite de tamanha pra nome de usuario -</Text>
+      <Text style={styles.textAtt}>- correção de bug onde as opções do cabeçalho sumiam -</Text>
+      <Text style={styles.textAtt}>- limitando Episodios assitidos ao maximo de Episodios -</Text>
+      <Text style={styles.textAtt}></Text>
+      <Text style={styles.textAtt}> ADIÇÕES:</Text>
+      <Text style={styles.textAtt}>- Mudar nome de usuario e senha -</Text>
+      <Text style={styles.textAtt}>- visualização das anotações no Favoritos -</Text>
+      <Text style={styles.textAtt}>- controle de versão visivel no radapé -</Text>
+      <Text style={styles.textAtt}>- icone do AnimaRei -</Text>
+      <Text style={styles.textAtt}></Text>
+      <Text style={styles.textAtt}> -- v 0.0.1 --</Text>
+      </>:
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
           <AnimeList            

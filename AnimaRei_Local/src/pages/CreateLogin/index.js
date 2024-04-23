@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native'
 import { styles } from "./style";
+import Version from "../../components/Version";
 
 import UserContext from "../UserContext";
 import { storageUserData, storageLoginData } from "../../service/local/user";
@@ -29,7 +30,7 @@ export default function CreateLogin() {
             navigation.navigate('Home')
           })
         }).catch((error)=>{
-          console.log("handleCreateUser - stogareUserDatahhh". error)
+          console.log("handleCreateUser - stogareUserData". error)
         })      
       }
       
@@ -75,7 +76,7 @@ export default function CreateLogin() {
       <Pressable style={styles.button} onPress={() => navigation.navigate("Login")}>
         <Text style={styles.buttonText}> Logar </Text>
       </Pressable>
-
+      <Version/>
     </View>
   )
 }

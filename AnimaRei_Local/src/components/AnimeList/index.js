@@ -14,7 +14,7 @@ function AnimeList({ data }) {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleAnimeFav(userName, title, images, episodes) {
-
+   
     //console.log("handleFAv:", userName)
     const currentEpisode = 0
     const note = ''
@@ -24,7 +24,8 @@ function AnimeList({ data }) {
       let favoriteData = { title, images, episodes, note, currentEpisode }
 
       if (favoriteData) {
-        storageFavoriteData(userName, favoriteData).then((res) => {
+        storageFavoriteData(userName, favoriteData).then(() => {
+        
         });
       }
     }
@@ -32,8 +33,7 @@ function AnimeList({ data }) {
     let favoriteData = { title, images, episodes, note, currentEpisode }
 
     if (favoriteData) {
-      storageFavoriteData(userName, favoriteData).then((res) => {
-      });
+      storageFavoriteData(userName, favoriteData)
     }
 
   }

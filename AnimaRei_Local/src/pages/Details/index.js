@@ -6,7 +6,7 @@ import { upFavorite } from '../../service/local/favorite';
 
 import UserContext from '../../pages/UserContext';
 import Header from '../../components/Header'
-
+import Version from '../../components/Version';
 
 import { styles } from './style'
 
@@ -15,8 +15,9 @@ const Details = ({ route }) => {
   const navigation = useNavigation()
 
   const { user, setUser } = useContext(UserContext)
-  const { detailsData } = route.params;
-  const { id, title, image } = detailsData;
+  const { detailsData } = route.params;  
+ 
+  const { id, title, image, handleFavoriteData } = detailsData;
 
   const [note, setNote] = useState(detailsData.note)
   const [current, setCurrent] = useState(detailsData.current)
@@ -24,20 +25,20 @@ const Details = ({ route }) => {
   
 
   function handleNewDetails(user, id, action, note, current, episodes) {
-    upFavorite(user, id, action, note, current, episodes).then(() => {
-      Alert.alert('Atualizado com sucesso!')
-      navigation.navigate('Home')
+
+    upFavorite(user, id, action, note, Number(current), Number(episodes)).then(() => {      
+      handleFavoriteData(user)      
     })
   }
  
 
   return (
-    <ScrollView style={styles.container}>    
-
-    <View>
+    
+      <View style={styles.container}>
+   
       <StatusBar />
       <Header />
-      <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>    
 
         <Image source={{ uri: image }} style={{ width: 400, height: 300 }} />
         <Text style={styles.title}>{title}</Text>
@@ -59,6 +60,7 @@ const Details = ({ route }) => {
         <Text style={styles.text}>Episodio atual:</Text>
         <TextInput
           style={styles.input}
+          keyboardType="numeric"
           value={current.toString()}          
           onChangeText={(e) => setCurrent(e)}
           />
@@ -70,6 +72,7 @@ const Details = ({ route }) => {
         <Text style={styles.text}>Episodios:</Text>
         <TextInput
           style={styles.input}
+          keyboardType="numeric"
           value={episodes.toString()}          
           onChangeText={(e) => setEpisodes(e)}
           />
@@ -79,13 +82,14 @@ const Details = ({ route }) => {
 
         <Pressable 
         style={styles.button}
-        onPress={() => { handleNewDetails(user, id, 'note', note, current, episodes) }}>
+        onPress={() => { handleNewDetails(user, id, 'edit', note, current, episodes) }}>
           <Text style={styles.buttonText}>Salvar</Text>
         </Pressable>
        
-      </View>
-    </View>
     </ScrollView>
+    <Version/>
+    
+    </View>
   );
 }
 

@@ -38,6 +38,13 @@ export default StyleSheet.create({
     width: '80%',
     color: colors.backSec
   },
+  textNote:{
+    fontSize: 15,
+    alignSelf: "center",
+    textAlign: "center",
+    width: '80%',
+    color: colors.backSec
+  },
   titleBar:{
     fontSize: 18,
     alignSelf: "center",

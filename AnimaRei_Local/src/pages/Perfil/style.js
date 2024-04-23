@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import {  StyleSheet } from "react-native";
 
 import {colors} from '../../components/colors'
 
@@ -15,9 +15,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.darkPry, 
     
   },
-  containerEp: {   
-   flexDirection: 'row'
-  },
   title:{
     fontSize: 25,
     marginTop: 10,
@@ -27,6 +24,7 @@ export const styles = StyleSheet.create({
     color: colors.backSec  
   },
   text:{
+    marginHorizontal:10,
     color: colors.primary
   },
   button: {
@@ -36,15 +34,24 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 5,
   },
+  buttonRed: {
+    padding: 8,
+    marginVertical:20,
+    marginHorizontal: 20,
+    backgroundColor: colors.alert,
+    borderRadius: 5,
+  },
   buttonText: {
     textAlign:'center',
     color: colors.darkPry,
     fontSize: 16,
   },
   containerInput:{
+    flexDirection:'row',
+    justifyContent:'space-around',
     marginHorizontal:20,
     marginVertical: 5,
-    width:'40%'
+    
   },
   containerInputNote:{
     marginHorizontal:20,
@@ -54,7 +61,8 @@ export const styles = StyleSheet.create({
   input:{
     backgroundColor:colors.backPry,
     color: colors.darkPry,
-    paddingHorizontal:10
+    paddingHorizontal:10,
+    margin:10
 
   }
 })

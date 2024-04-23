@@ -5,35 +5,31 @@ import {colors} from '../../components/colors'
 export default StyleSheet.create({
 
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: "space-between",
-    alignSelf:"center",
-    alignContent:"center",
-    backgroundColor: colors.primary,
-    padding:20, 
+    flexDirection: 'row', 
+    backgroundColor: colors.primary,    
     margin:10,
-    borderRadius:15,
-    width:"95%",
-    height: 70
+    borderRadius:15,   
+    height: 70,
+    justifyContent:'space-between'
         
   },  
-  user: {
-    alignItems: 'center',
-    justifyContent: "center",
-    flexDirection: 'row',
-  },
   logo:{
     width: 35,
     height:35,  
     borderRadius: 50,  
   },
+  user: {
+    alignItems: 'center',    
+    flexDirection: 'row',
+    margin:15,
+    maxWidth:150
+  },
   nav: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: "center",
+    alignItems: 'center',    
     alignSelf:"center",
-    alignContent:"center"  
+    alignContent:"center" ,
+    
   },
   btn:{
     backgroundColor: colors.primary,
@@ -63,8 +59,9 @@ export default StyleSheet.create({
     fontSize: 18,     
     fontWeight: 'bold',
     paddingLeft: 5,
-    color: colors.darkPry
-    
+    color: colors.darkPry,
+    //maxWidth:150,
+    maxHeight:25    
   },
   headerNameBtn: {    
     alignSelf:"center",

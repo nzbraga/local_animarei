@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
+//salvar nova lista
 export const storageFavoriteData = async (user, newFavoriteData) => {
   try {
     let existingData = await AsyncStorage.getItem(`@Fav${user}`);
@@ -17,13 +18,14 @@ export const storageFavoriteData = async (user, newFavoriteData) => {
     const mergedData = [...existingData, newFavoriteData];
 
     await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(mergedData));
-    Alert.alert("Adicionado com sucesso!");
+    Alert.alert("Atualizado com sucesso!");
     //console.log("Favoritos salvos localmente:", mergedData, ">>>", user);
   } catch (error) {
     console.log("Erro ao armazenar os dados do favorito:", error);
   }
 };
 
+//ler lista de favorito
 export const loadFavoriteData = async (user) => {
 
   try {
@@ -59,14 +61,14 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
             userData[id].currentEpisode -= 1
           }
           break;
-        case 'note':  
-
-        //if (userData[id].currentEpisode < userData[id].episodes) {}
-                 
+        case 'edit':         
+        if (userData[id].currentEpisode <= userData[id].episodes && current <= episodes) {
           userData[id].note = note
           userData[id].episodes = episodes
           userData[id].currentEpisode = current
-
+        } else {
+          return Alert.alert('Episodio Atual nao pode ser maior que o numero de Episodios ')
+        }
           break;
         case 'complite':
           userData[id].currentEpisode = userData[id].episodes
@@ -84,6 +86,7 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
           throw new Error('Ação não reconhecida');
       }
       await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+      return Alert.alert("Atualizado com sucesso")
 
     } else {
       // Se não houver dados para esse usuário
@@ -95,7 +98,9 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
   }
 };
 
-
+export const removeFavList = async (user) =>{
+  AsyncStorage.removeItem(`@Fav${user}`)
+}
 
 
 export const allKeys = async () => {

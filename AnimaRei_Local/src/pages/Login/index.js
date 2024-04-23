@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 import styles from './style'
+import Version from "../../components/Version";
 
 import UserContext from '../UserContext'
 import { useNavigation } from '@react-navigation/native'
 
 import { storageLoginData, loadUserData , loadLoginData} from "../../service/local/user";
+import validationUser from "../../service/validation/login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
@@ -19,19 +21,21 @@ const Login = () => {
 
   //logica de login
   const handleLogin = async (name , password) => {
-    
-     await loadUserData(name ,password).then((res)=>{
-      //console.log("hanldelogin-",res)
-      
-      if(password === res.password){
-        setUser(name)
-        storageLoginData(name).then(()=>{
-          navigation.navigate('Home')
-        })
-      }
-     }).catch((error)=>{
-      //console.error("Erro ao logar: ", error)
-     })
+    validationUser(name, password).then((valid)=>{
+
+      loadUserData(valid.name ,valid.password).then((res)=>{
+        //console.log("hanldelogin-",res)
+        
+        if(valid.password === res.password){
+          setUser(name)
+          storageLoginData(name).then(()=>{
+            navigation.navigate('Home')
+          })
+        }
+      }).catch((error)=>{
+        //console.error("Erro ao logar: ", error)
+      })
+    })
   }
 
   //verificar se ha alguem logado
@@ -49,7 +53,7 @@ const Login = () => {
       handleLogged() 
       //apagar local storage pra testes
       //AsyncStorage.clear()
-  }, [user])
+  }, [])
 
   return (
 
@@ -82,7 +86,7 @@ const Login = () => {
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('CreateLogin')}>
         <Text style={styles.buttonText}>Criar</Text>
       </TouchableOpacity>
-
+      <Version/>
     </View>
   )
 }

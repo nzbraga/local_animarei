@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 
+//salva um novo usuario
 export const storageUserData = async (name, password) => {
 
   try {
@@ -9,12 +10,14 @@ export const storageUserData = async (name, password) => {
     const newUser = JSON.stringify(user);
     await AsyncStorage.setItem(`@${name}`, newUser);
     //console.log("Dados do usuário salvos localmente:", newUser);
+    return true
   } catch (error) {
     console.log("Erro ao armazenar os dados do usuário:", error);
     Alert.alert("Erro ao armazenar os dados do usuário")
   }
 };
 
+// logar usuario
 export const storageLoginData = async ( name ) => {
 
   try {
@@ -22,21 +25,26 @@ export const storageLoginData = async ( name ) => {
     const newUser = JSON.stringify(user);
     await AsyncStorage.setItem(`@Logged`, newUser);
     //console.log("Dados do usuário salvos localmente:", newUser);
+    return true
   } catch (error) {
     console.log("Erro ao logar os dados do usuário:", error);
     Alert.alert("Erro ao logar os dados do usuário")
   }
 };
 
+
+// autenticar usuario logado
 export const loadUserData = async (name, password) => {
   try {
     const userData = await AsyncStorage.getItem(`@${name}`);
     const user = JSON.parse(userData)
-    //console.log("loadUserData: ", userData)
+    console.log("loadUserData: ", userData)
     if (user !== null) {
       if (user.password === password){
+        console.log('ok')
         return user;
       }
+      return Alert.alert('Senha ou Usuario Incorreto!')
     } else {
       console.log("Não há dados do usuário armazenados localmente.");      
       return Alert.alert("Usuario não encontrado")
@@ -47,6 +55,8 @@ export const loadUserData = async (name, password) => {
   }
 };
 
+
+//identificar quem esta logado
 export const loadLoginData = async () => {
   try {
     const userData = await AsyncStorage.getItem(`@Logged`);
@@ -64,7 +74,26 @@ export const loadLoginData = async () => {
 };
 
 
-export async function logOut() {
+export const deleteUser = async (name, password)=> {
+  try {
+    const userData = await AsyncStorage.getItem(`@${name}`);
+    const user = JSON.parse(userData)
+    //console.log("loadUserData: ", userData)
+    if (user !== null) {
+      if (user.password === password){
+        await AsyncStorage.removeItem(`@${name}`)
+        return true
+      }else{
+        Alert.alert('Senha Incorreta')
+      }
+    }
+  }
+  catch (error) {
+    console.log("Erro ao deletar Usuario ", error)
+  }
+  
+}
+export const logOut = async () => {  
 
   try {
     await AsyncStorage.removeItem(`@Logged`);
