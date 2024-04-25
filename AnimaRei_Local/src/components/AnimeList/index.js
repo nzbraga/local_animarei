@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { View, Text, FlatList, Image, Pressable, ActivityIndicator, Alert } from "react-native";
 
 import UserContext from '../../pages/UserContext'
 
@@ -61,7 +61,7 @@ function AnimeList({ data }) {
 
 
 
-          <TouchableOpacity onPress={() => handleAnimeFav(
+          <Pressable onPress={() => handleAnimeFav(
             user,
             item.title,
             item.images.jpg.large_image_url,
@@ -70,7 +70,7 @@ function AnimeList({ data }) {
           )} style={styles.starContainer}>
 
             <Text>🤍</Text>
-          </TouchableOpacity>
+          </Pressable>
 
         </View>
 

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Pressable, Text, ActivityIndicator } from "react-native";
+import { View, TextInput, Pressable, Text, ActivityIndicator, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import FriendList from "../FriendList";
 
 import styles from "./style";
+import { allKeys, findFriend } from "../../service/local/friend";
 
 
 
@@ -15,15 +17,37 @@ function API() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false)
 
+  const handleFindFriend = () => {
+    if (search === '') {
+      Alert.alert('insira o nome do Amigo que quer Buscar')
+    }
+    getFriendData();
+  };
+
+  const getFriendData = async () => {
+    setIsLoading(true)
+    if (search) {
+      const res = await fetch(`${api}${search}`);
+      const { data } = await res.json();
+      setData(data);
+    }
+    setIsLoading(false)
+  };
+
+  useEffect(() => {
+    getFriendData();
+  }, []);
+
 
   return (
 
     <View>
 
       <View style={styles.container}>
+         
         <View style={styles.textContainer}>
           <Pressable style={styles.button}
-            onPress={() => handleSearch()}>
+            onPress={() => handleFindFriend(search)}>
             <Text style={styles.buttonText}>Buscar</Text>
           </Pressable>
           <TextInput style={styles.textInput}
@@ -35,8 +59,8 @@ function API() {
         </View>
 
       </View>
-          <Text style={{color:'white', margin:30, fontSize:40, textAlign:'center'}}> EM BREVE! </Text>
-   { /*
+         
+   
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
           <FriendList            
@@ -44,7 +68,7 @@ function API() {
           />
         }
       </View>
-      */}
+      
     </View>
   )
 }

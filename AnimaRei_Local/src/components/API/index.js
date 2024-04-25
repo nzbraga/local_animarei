@@ -71,8 +71,7 @@ function API() {
       <Text style={styles.textAtt}> ADIÇÕES:</Text>
       <Text style={styles.textAtt}>- Mudar nome de usuario e senha -</Text>
       <Text style={styles.textAtt}>- visualização das anotações no Favoritos -</Text>
-      <Text style={styles.textAtt}>- controle de versão visivel no radapé -</Text>
-      <Text style={styles.textAtt}>- icone do AnimaRei -</Text>
+      <Text style={styles.textAtt}>- controle de versão visivel no radapé -</Text>      
       <Text style={styles.textAtt}></Text>
       <Text style={styles.textAtt}> -- v 0.0.1 --</Text>
       </>:

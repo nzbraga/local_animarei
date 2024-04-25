@@ -25,8 +25,26 @@ const Details = ({ route }) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hideNewSenha, setHideSenha] = useState(true)
 
-  //console.log('Perfil user: ',user)
 
+  function handleDeleteUser(name, password){
+    
+    Alert.alert('Excluir Login','Deseja Remover Usuario e sua lista de favoritos? Não será possivel recuperar essas informações',
+    [{ text: 'Yes', onPress: () => 
+      {
+        loadUserData(name, password).then((res) => {      
+          if(res){      
+            removeFavList(name)  
+            deleteUser(name, password).then(()=>{          
+              navigation.navigate('Login')
+            })
+          }
+        })
+      }
+    },{ text: 'No' },],
+    { cancelable: false }      
+  );
+    
+  }
   async function  handleNewUserName(user, newUser, password) {
    await validationUser(newUser, password).then((valid)=>{
    //console.log("valid", valid)
@@ -53,7 +71,6 @@ const Details = ({ route }) => {
   }
   })
   }
-
   function handleNewPassword(user, password, newPassword, confirmPassword){
   
     validationPassword(user, newPassword, confirmPassword).then((valid)=>{
@@ -106,16 +123,18 @@ const Details = ({ route }) => {
                   Alterar Nome
                 </Text>
               </Pressable>
+              
               <Pressable
 
                 style={styles.buttonRed}
-                onPress={() => setHideSenha(false)}
+                onPress={() => handleDeleteUser(user, password)}
               >
 
                 <Text>
                   Excluir Usuario
                 </Text>
               </Pressable>
+            
               <Pressable
 
                 style={styles.button}

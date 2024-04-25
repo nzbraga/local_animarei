@@ -27,7 +27,8 @@ const Details = ({ route }) => {
   function handleNewDetails(user, id, action, note, current, episodes) {
 
     upFavorite(user, id, action, note, Number(current), Number(episodes)).then(() => {      
-      handleFavoriteData(user)      
+      handleFavoriteData(user)     
+      //navigation.navigate('Favorite')
     })
   }
  

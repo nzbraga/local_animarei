@@ -38,10 +38,9 @@ export const loadUserData = async (name, password) => {
   try {
     const userData = await AsyncStorage.getItem(`@${name}`);
     const user = JSON.parse(userData)
-    console.log("loadUserData: ", userData)
+    //console.log("loadUserData: ", userData)
     if (user !== null) {
-      if (user.password === password){
-        console.log('ok')
+      if (user.password === password){       
         return user;
       }
       return Alert.alert('Senha ou Usuario Incorreto!')
@@ -74,25 +73,11 @@ export const loadLoginData = async () => {
 };
 
 
-export const deleteUser = async (name, password)=> {
-  try {
-    const userData = await AsyncStorage.getItem(`@${name}`);
-    const user = JSON.parse(userData)
-    //console.log("loadUserData: ", userData)
-    if (user !== null) {
-      if (user.password === password){
-        await AsyncStorage.removeItem(`@${name}`)
-        return true
-      }else{
-        Alert.alert('Senha Incorreta')
-      }
-    }
-  }
-  catch (error) {
-    console.log("Erro ao deletar Usuario ", error)
-  }
-  
+export const deleteUser = async (name)=> {  
+  await AsyncStorage.removeItem(`@${name}`)  
 }
+
+
 export const logOut = async () => {  
 
   try {

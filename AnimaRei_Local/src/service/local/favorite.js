@@ -54,11 +54,13 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
         case '+':
           if (userData[id].currentEpisode < userData[id].episodes) {
             userData[id].currentEpisode += 1
+            await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
           }
           break;
         case '-':
           if (userData[id].currentEpisode > 0) {
             userData[id].currentEpisode -= 1
+            await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
           }
           break;
         case 'edit':         
@@ -66,27 +68,30 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
           userData[id].note = note
           userData[id].episodes = episodes
           userData[id].currentEpisode = current
+          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+          return Alert.alert("Atualizado com sucesso")
         } else {
           return Alert.alert('Episodio Atual nao pode ser maior que o numero de Episodios ')
         }
           break;
         case 'complite':
           userData[id].currentEpisode = userData[id].episodes
+          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
           break;
         case 'clear':
           userData[id].currentEpisode = 0
+          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
           break;
         case 'delete':
           // Remover o item do array
           userData.splice(id, 1);
+          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
           break;
 
         default:
           // Caso de ação não reconhecida
           throw new Error('Ação não reconhecida');
       }
-      await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
-      return Alert.alert("Atualizado com sucesso")
 
     } else {
       // Se não houver dados para esse usuário
