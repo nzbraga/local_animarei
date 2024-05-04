@@ -5,9 +5,19 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     
   const [user, setUser] = useState(null);
+  const [userImage, setUserImage] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+  
+  const [userId, setUserId] = useState(1);
+
+  const autoIncrement = ()=>{
+    setUserId(userId +1)
+    return userId
+  }
+
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, userImage, setUserImage, autoIncrement, currentId, setCurrentId }}>
       {children}
     </UserContext.Provider>
   );

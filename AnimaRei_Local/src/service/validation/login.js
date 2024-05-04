@@ -1,10 +1,6 @@
 import { Alert } from "react-native"
 
-export default async function validationUser(user, password, passwordConfirm) {
-
-    //console.log("validationUser", user)
-    //console.log("validationUser", password)
-    //console.log("validationUser",passwordConfirm)
+export default async function validationUser(user, password) {
 
     if (!user) {
         return Alert.alert("Digite seu Nome de Usuario!");
@@ -13,7 +9,7 @@ export default async function validationUser(user, password, passwordConfirm) {
         return Alert.alert("Digite sua Senha!");
     }
    
-    const newUser = { name: user, password: password};
+    const newUser = { name: user, password};
     //console.log("validationUser", newUser)
 
     return newUser;

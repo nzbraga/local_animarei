@@ -1,76 +1,128 @@
-import React, { useEffect, useState } from "react";
-import { View, TextInput, Pressable, Text, ActivityIndicator, Alert } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { View, TextInput, Pressable, Text, ActivityIndicator, Alert, FlatList, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import FriendList from "../FriendList";
-
+import UserContext from '../../pages/UserContext'
 import styles from "./style";
-import { allKeys, findFriend } from "../../service/local/friend";
+import { storageFriendData, loadFriendData } from "../../service/local/friend";
+import { findUserByName, findUserById } from '../../service/local/user'
 
-
-
-function API() {
-  
+function FriendAPI() {
   const navigation = useNavigation();
-
+  const { user, currentId } = useContext(UserContext)
   const [search, setSearch] = useState('');
-  const [data, setData] = useState({});
+  const [friend, setFriend] = useState(null);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleFindFriend = () => {
-    if (search === '') {
-      Alert.alert('insira o nome do Amigo que quer Buscar')
-    }
-    getFriendData();
-  };
-
-  const getFriendData = async () => {
-    setIsLoading(true)
-    if (search) {
-      const res = await fetch(`${api}${search}`);
-      const { data } = await res.json();
-      setData(data);
-    }
-    setIsLoading(false)
-  };
-
   useEffect(() => {
-    getFriendData();
-  }, []);
+    handleLoadFriendData(currentId)
+  }, [])
 
+  async function handleFriendData(friendName) {
+    try {
+      const res = await findUserByName(friendName);
+      setFriend(res);
+    } catch (error) {
+      console.error("Erro ao buscar amigo:", error);
+    }
+  }
+
+  function handleAddFriend(userId, friendId) {
+    let newFriend = { id: friendId }
+    storageFriendData(userId, newFriend)
+  }
+
+  async function handleLoadFriendData(id) {
+    try {
+      const res = await loadFriendData(id);
+      setData(res);
+    } catch (error) {
+      console.error("Erro ao carregar dados do amigo:", error);
+      setData([]); // Define os dados como vazios em caso de erro
+    }
+  }
 
   return (
-
     <View>
-
       <View style={styles.container}>
-         
         <View style={styles.textContainer}>
-          <Pressable style={styles.button}
-            onPress={() => handleFindFriend(search)}>
+          <Pressable style={styles.button} onPress={() => handleFriendData(search)}>
             <Text style={styles.buttonText}>Buscar</Text>
           </Pressable>
-          <TextInput style={styles.textInput}
+          <TextInput
+            style={styles.textInput}
             value={search}
             onChangeText={(v) => setSearch(v)}
             placeholder='Buscar por um Amigo'
           />
-
         </View>
-
       </View>
-         
-   
+
       <View style={styles.loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
-          <FriendList            
-            data={data}            
-          />
+          <View>
+            {friend && (
+              <View>
+                <Pressable style={styles.button} onPress={() => handleAddFriend(currentId, friend.id)}>
+                  <Image
+                    style={styles.image}
+                    source={friend.image ? { uri: friend.image } : require('../../components/img/icon-anima.jpg')}
+                  />
+                  <Text>{friend.name} ♥️</Text>
+                </Pressable>
+              </View>
+            )}
+            <FlatList
+              data={data}
+              keyExtractor={(item) => item.id.toString()} // Supondo que cada item tenha uma propriedade 'id' que seja única
+              renderItem={({ item }) => (
+                <FriendItem id={item.id} />
+              )}
+            />
+          </View>
         }
       </View>
-      
     </View>
-  )
+  );
 }
 
-export default API;
+// Componente separado para renderizar cada item da lista de amigos
+function FriendItem({ id }) {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const userData = await findUserById(id);
+        setUserData(userData);        
+      } catch (error) {
+        console.error("Erro ao carregar dados do amigo:", error);
+      }
+    }
+
+    fetchUserData();
+
+    // Cleanup function
+    return () => {
+      setUserData(null); // Limpa os dados do usuário ao desmontar o componente
+    };
+  }, [id]); // Executa o efeito sempre que o ID do amigo mudar
+
+  if (!userData) {
+    return null; // Renderiza null se os dados do usuário ainda estiverem sendo carregados
+  }
+
+  return (
+    <View>
+      <Text style={{ color: 'white' }}>{userData.name}</Text>
+      <Image
+        style={styles.image}
+        source={userData.image ? { uri: userData.image } : require('../../components/img/icon-anima.jpg')}
+      />
+      <Text style={{ color: 'white' }}>{userData.email}</Text>
+    </View>
+  );
+}
+
+export default FriendAPI;

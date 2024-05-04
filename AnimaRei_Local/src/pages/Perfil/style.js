@@ -64,6 +64,12 @@ export const styles = StyleSheet.create({
     paddingHorizontal:10,
     margin:10
 
-  }
+  },
+  image: {
+    width: 180,
+    height :180,
+    borderRadius: 20,   
+    alignSelf:'center'
+  },
 })
 

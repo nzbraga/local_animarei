@@ -2,37 +2,38 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 //salvar nova lista
-export const storageFriendData = async (user, newFriend) => {
+export const storageFriendData = async (userId, friend) => {
   try {
-    let existingData = await AsyncStorage.getItem(`@Friend${user}`);
+    let existingData = await AsyncStorage.getItem(`@Friend${userId}`);
     existingData = existingData ? JSON.parse(existingData) : [];
 
-    // Check if the title already exists in the existing data
-    const friendExists = existingData.some(item => item.name === newFriend.name);
+    // Verifica se já existe um amigo com o mesmo ID
+    const friendExists = existingData.some(item => item.id === friend.id);
 
     if (friendExists) {
-      Alert.alert("Voces ja são amigos!");
-      return; // Do not proceed further
+      Alert.alert("Vocês já são amigos!");
+      return; // Não prossegue mais
     }
 
-    const mergedData = [...existingData, newFriend];
+    const mergedData = [...existingData, friend];
 
-    await AsyncStorage.setItem(`@Friend${user}`, JSON.stringify(mergedData));
+    await AsyncStorage.setItem(`@Friend${userId}`, JSON.stringify(mergedData));
     Alert.alert("Adicionado com sucesso!");
-    console.log("Friend salvos localmente:", mergedData, ">>>", user);
+    console.log("Friend salvos localmente:", mergedData, ">>>", userId);
   } catch (error) {
-    console.log("Erro ao armazenar os dados do favorito:", error);
+    console.log("Erro ao armazenar os dados do amigo:", error);
   }
 };
 
+
 //ler lista de favorito
-export const loadFavoriteData = async (user) => {
+export const loadFriendData = async (userId) => {
 
   try {
-    const FavoriteData = await AsyncStorage.getItem(`@Friend${user}`);
-    if (FavoriteData !== null && FavoriteData !== undefined) {
-      console.log("Friend carregados:", FavoriteData);
-      return JSON.parse(FavoriteData);
+    const FriendData = await AsyncStorage.getItem(`@Friend${userId}`);
+    if (FriendData !== null && FriendData !== undefined) {
+      console.log("Friend carregados:", FriendData);
+      return JSON.parse(FriendData);
     } else {
       //console.log("Não há Favoritos armazenados localmente.");
       return null;
@@ -43,35 +44,10 @@ export const loadFavoriteData = async (user) => {
   }
 };
 
-
-
-export const upFavorite = async () => {
- 
-};
-
-export const removeFavList = async (user) =>{
-  AsyncStorage.removeItem(`@Friend${user}`)
+export const removeFavList = async (userId) =>{
+  AsyncStorage.removeItem(`@Friend${userId}`)
 }
 
-export const findFriend = async (name) => {
-  try {
-    const friend = await AsyncStorage.getItem(`@${name}`);
-    //console.log(true)
-    return true;
-  } catch (error) {
-    console.error('Error fetching keys from AsyncStorage:', error);
-    return [];
-  }
-};
-export const allKeys = async () => {
-  try {
-    const keys = await AsyncStorage.getAllKeys();
-    console.log(keys)
-    //return keys;
-  } catch (error) {
-    console.error('Error fetching keys from AsyncStorage:', error);
-    return [];
-  }
-};
+
 
 

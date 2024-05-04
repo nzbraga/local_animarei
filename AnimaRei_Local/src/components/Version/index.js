@@ -5,7 +5,7 @@ const Version = () => {
   return (
     <View style={style.container}>
       
-    <Text style={style.text}>version 0.0.1</Text>
+    <Text style={style.text}>version 0.0.1.1</Text>
     </View>
   )
 }

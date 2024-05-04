@@ -21,7 +21,7 @@ const Favorites = () => {
     if(lists.length === 0){
       handleFavoriteData(user);
     }
-  }, [lists]);
+  }, []);
 
   function handleDetails(id, title, image, note, current, episodes){
     const detailsData = {id, title, image, note, current, episodes, handleFavoriteData}

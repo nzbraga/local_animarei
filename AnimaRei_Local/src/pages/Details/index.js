@@ -28,7 +28,7 @@ const Details = ({ route }) => {
 
     upFavorite(user, id, action, note, Number(current), Number(episodes)).then(() => {      
       handleFavoriteData(user)     
-      //navigation.navigate('Favorite')
+      navigation.navigate('Favorite')
     })
   }
  

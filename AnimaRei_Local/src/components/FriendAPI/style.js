@@ -40,5 +40,11 @@ export default StyleSheet.create({
     },
     loading:{
       margin:20,     
-    }
+    },
+    image: {
+      width: 100,
+      height : 100,
+      borderRadius: 50,   
+      alignSelf:'center'
+    },
   })

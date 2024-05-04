@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 //salvar nova lista
-export const storageFavoriteData = async (user, newFavoriteData) => {
+export const storageFavoriteData = async (userId, newFavoriteData) => {
   try {
-    let existingData = await AsyncStorage.getItem(`@Fav${user}`);
+    let existingData = await AsyncStorage.getItem(`@Fav${userId}`);
     existingData = existingData ? JSON.parse(existingData) : [];
 
     // Check if the title already exists in the existing data
@@ -17,7 +17,7 @@ export const storageFavoriteData = async (user, newFavoriteData) => {
 
     const mergedData = [...existingData, newFavoriteData];
 
-    await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(mergedData));
+    await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(mergedData));
     Alert.alert("Atualizado com sucesso!");
     //console.log("Favoritos salvos localmente:", mergedData, ">>>", user);
   } catch (error) {
@@ -26,10 +26,10 @@ export const storageFavoriteData = async (user, newFavoriteData) => {
 };
 
 //ler lista de favorito
-export const loadFavoriteData = async (user) => {
+export const loadFavoriteData = async (userId) => {
 
   try {
-    const FavoriteData = await AsyncStorage.getItem(`@Fav${user}`);
+    const FavoriteData = await AsyncStorage.getItem(`@Fav${userId}`);
     if (FavoriteData !== null && FavoriteData !== undefined) {
       //console.log("Favoritos carregados:", FavoriteData);
       return JSON.parse(FavoriteData);
@@ -45,22 +45,22 @@ export const loadFavoriteData = async (user) => {
 
 
 
-export const upFavorite = async (user, id, action, note, current, episodes) => {
+export const upFavorite = async (userId, id, action, note, current, episodes) => {
   try {
-    let userData = await AsyncStorage.getItem(`@Fav${user}`);
+    let userData = await AsyncStorage.getItem(`@Fav${userId}`);
     if (userData !== null) {
       userData = JSON.parse(userData);
       switch (action) {
         case '+':
           if (userData[id].currentEpisode < userData[id].episodes) {
             userData[id].currentEpisode += 1
-            await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+            await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           }
           break;
         case '-':
           if (userData[id].currentEpisode > 0) {
             userData[id].currentEpisode -= 1
-            await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+            await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           }
           break;
         case 'edit':         
@@ -68,7 +68,7 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
           userData[id].note = note
           userData[id].episodes = episodes
           userData[id].currentEpisode = current
-          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           return Alert.alert("Atualizado com sucesso")
         } else {
           return Alert.alert('Episodio Atual nao pode ser maior que o numero de Episodios ')
@@ -76,16 +76,16 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
           break;
         case 'complite':
           userData[id].currentEpisode = userData[id].episodes
-          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           break;
         case 'clear':
           userData[id].currentEpisode = 0
-          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           break;
         case 'delete':
           // Remover o item do array
           userData.splice(id, 1);
-          await AsyncStorage.setItem(`@Fav${user}`, JSON.stringify(userData));
+          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           break;
 
         default:
@@ -103,15 +103,14 @@ export const upFavorite = async (user, id, action, note, current, episodes) => {
   }
 };
 
-export const removeFavList = async (user) =>{
-  AsyncStorage.removeItem(`@Fav${user}`)
+export const removeFavList = async (userId) =>{
+  AsyncStorage.removeItem(`@Fav${userId}`)
 }
 
 
 export const allKeys = async () => {
   try {
-    const keys = await AsyncStorage.getAllKeys();
-    console.log(keys)
+    const keys = await AsyncStorage.getAllKeys();   
     return keys;
   } catch (error) {
     console.error('Error fetching keys from AsyncStorage:', error);

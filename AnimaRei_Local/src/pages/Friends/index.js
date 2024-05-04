@@ -14,6 +14,8 @@ const Friends = () => {
       <StatusBar />
       <Header page='Friends' />
       <FriendAPI/>
+      <Text style={{color:'white', textAlign:"center"}}>...em construção...</Text>
+  
       <Version/>
     </View>
   )

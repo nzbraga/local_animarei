@@ -7,68 +7,70 @@ import { loadLoginData, logOut } from '../../service/local/user';
 import UserContext from '../../pages/UserContext';
 
 import styles from './style';
- 
-const Header = ( {page} ) => {
+import { icons } from '../icons';
+
+const Header = ({ page }) => {
 
   const navigation = useNavigation()
- 
-  const { user } = useContext(UserContext)
+
+  const { user, userImage , setUserImage, currentId } = useContext(UserContext)
+  
 
 
-  function handleLogOut(){
-    Alert.alert('LogOut','Deseja deslogar?',
-      [{ text: 'Yes', onPress: () => 
-        {
+
+  function handleLogOut() {
+    Alert.alert('LogOut', 'Deseja deslogar?',
+      [{
+        text: 'Yes', onPress: () => {
           navigation.navigate("Login")
           logOut()
+          setUserImage('')
         }
-      },{ text: 'No' },],
-      { cancelable: false }      
+      }, { text: 'No' },],
+      { cancelable: false }
     );
-   
+
   }
 
-  
   return (
 
     <View style={styles.header}>
 
       <Pressable style={styles.user}
-      onPress={() => navigation.navigate('Perfil')}
-      >   
+        onPress={() => navigation.navigate('Perfil')}
+      >
         <Image
           style={styles.image}
-          source={require('../img/icon-anima.jpg')}
+          source={userImage ? { uri: userImage } : require('../../components/img/icon-anima.jpg')}
         />
-      
-          <Text style={styles.headerName}>{user}</Text>
-          
+
+        <Text style={styles.headerName}>{user}</Text>
       </Pressable>
 
       <View style={styles.nav}>
 
         <Pressable
-         style={page === 'Home' ?   styles.btnPlus : styles.btn}
+          style={page === 'Home' ? styles.btnPlus : styles.btn}
           onPress={() => navigation.navigate('Home')}>
-          <Text>🏠</Text>
+          <Text>{icons.home}</Text>
         </Pressable>
 
         <Pressable
-           style={page === 'Favorite' ?   styles.btnPlus : styles.btn}
+          style={page === 'Favorite' ? styles.btnPlus : styles.btn}
           onPress={() => navigation.navigate('Favorite')}>
           <Text>♥️</Text>
         </Pressable>
 
         <Pressable
-           style={page === 'Friends' ?   styles.btnPlus : styles.btn}
+          style={page === 'Friends' ? styles.btnPlus : styles.btn}
           onPress={() => navigation.navigate('Friends')}>
           <Text>👥</Text>
         </Pressable>
 
         <Pressable
           style={styles.btn}
-          onPress={()=> handleLogOut()} 
-          >
+          onPress={() => handleLogOut()}
+        >
           <Text>🚪</Text>
         </Pressable>
 

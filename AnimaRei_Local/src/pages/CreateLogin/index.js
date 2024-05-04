@@ -13,7 +13,8 @@ export default function CreateLogin() {
 
   const navigation = useNavigation()
 
-  const { setUser } = useContext(UserContext)
+  const { setUser, autoIncrement, setCurrentId } = useContext(UserContext)
+  
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -23,20 +24,28 @@ export default function CreateLogin() {
    
     await validationUser(name, password, passwordConfirm).then((res)=>{
       if(res){
-       //console.log("handleCreate - user", res)
-        storageUserData(res.name, res.password).then(()=>{
-          storageLoginData(res.name).then(()=>{
-            setUser(res.name)
-            navigation.navigate('Home')
+        //console.log("handleCreate - user", res)
+        let newId = autoIncrement()
+        let data = {password: res.password, name, id:newId}
+        storageUserData(data).then((res)=>{    
+          if(res){
+          storageLoginData(newId).then(()=>{          
+              setUser(name)
+              setCurrentId(newId)
+              navigation.navigate('Home')            
           })
+        }      
         }).catch((error)=>{
           console.log("handleCreateUser - stogareUserData". error)
         })      
-      }
-      
+      }      
     })
 
   }
+  
+  //adicionar olhinho da senha oculta ou nao
+  //adicionar olhinho da senha oculta ou nao
+  //adicionar olhinho da senha oculta ou nao
   
   return (
     <View style={styles.container}>
@@ -47,7 +56,7 @@ export default function CreateLogin() {
         style={styles.input}
         value={name}
         onChangeText={(e) => setName(e)}
-        placeholder="Digite seu Usuario"
+        placeholder="Digite seu Nome de Usuario"
       />
 
       <TextInput
