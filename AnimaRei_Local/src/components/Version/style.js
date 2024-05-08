@@ -1,7 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../colors';
+import  { colors }  from '../../pages/Style/colors';
+
 
 export default StyleSheet.create({
+
   
   container: {
     position: 'absolute',

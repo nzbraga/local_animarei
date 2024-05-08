@@ -1,26 +1,26 @@
 import { StyleSheet } from "react-native";
 
-import {colors} from '../../components/colors'
+import  { colors }  from '../Style/colors'
 
-export const styles = StyleSheet.create({
+export default StyleSheet.create({
   container:{
     flex:1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.darkPry,
-    colors:colors.light
+    colors: colors.light
   },
   title:{
     marginBottom: 14,
     fontSize: 20,
-    color:colors.light,
+    color: colors.light,
     margin:20
   },
   title2:{
     marginTop: 40,
     marginBottom:20,
     fontSize: 20,
-    color:colors.light,
+    color: colors.light,
    
   },
   input:{

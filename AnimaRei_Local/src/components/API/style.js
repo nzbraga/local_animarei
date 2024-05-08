@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {colors} from  '../colors'
+import  { colors }  from  '../../pages/Style/colors'
 
 export default StyleSheet.create({
     container: {
@@ -50,5 +50,15 @@ export default StyleSheet.create({
     textAtt:{
       textAlign:'center',
       color: colors.backSec
-    }
+    },
+    textZap:{
+      fontSize:20,
+      textAlign:'center',
+      color: colors.backSec
+    },
+    imageZap: {
+      width: 30,
+      height: 30,
+      borderRadius: 20,
+    },
   })

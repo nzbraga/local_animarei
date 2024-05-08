@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { View, Text, TextInput, Pressable, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native'
-import { styles } from "./style";
+import styles from "./style";
 import Version from "../../components/Version";
 
 import UserContext from "../UserContext";

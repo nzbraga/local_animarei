@@ -16,7 +16,7 @@ import Version from '../../components/Version';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { styles } from './style'
+import styles from './style'
 
 const Details = ({ route }) => {
 

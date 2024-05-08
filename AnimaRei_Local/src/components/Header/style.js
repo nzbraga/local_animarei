@@ -1,9 +1,8 @@
 import { StyleSheet } from 'react-native';
-
-import {colors} from '../../components/colors'
+import  { colors }  from '../../pages/Style/colors'
 
 export default StyleSheet.create({
-
+  
   header: {
     flexDirection: 'row', 
     backgroundColor: colors.primary,    
@@ -72,3 +71,4 @@ export default StyleSheet.create({
     borderRadius: 20,
   },
 });
+

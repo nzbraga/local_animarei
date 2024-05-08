@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, FlatList, Image, Pressable, ActivityIndicator, Alert } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 import UserContext from '../../pages/UserContext'
 
@@ -10,12 +11,14 @@ import styles from "./style";
 
 function AnimeList({ data }) {
 
-  const { user } = useContext(UserContext)
+  const { user, currentId } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(false)
+  
+  const navigation = useNavigation()
 
-  async function handleAnimeFav(userName, title, images, episodes) {
+  async function handleAnimeFav(currentId, title, images, episodes) {
    
-    //console.log("handleFAv:", userName)
+    //console.log("handleFAv:", currentId)
     const currentEpisode = 0
     const note = ''
 
@@ -24,7 +27,7 @@ function AnimeList({ data }) {
       let favoriteData = { title, images, episodes, note, currentEpisode }
 
       if (favoriteData) {
-        storageFavoriteData(userName, favoriteData).then(() => {
+        storageFavoriteData(currentId, favoriteData).then(() => {
         
         });
       }
@@ -33,9 +36,13 @@ function AnimeList({ data }) {
     let favoriteData = { title, images, episodes, note, currentEpisode }
 
     if (favoriteData) {
-      storageFavoriteData(userName, favoriteData)
+      storageFavoriteData(currentId, favoriteData)
     }
 
+  }
+
+  function handleAnimeInfo(anime){
+    navigation.navigate('Anime', {anime})
   }
 
   const renderItem = ({ item }) => (
@@ -43,7 +50,13 @@ function AnimeList({ data }) {
 
       <View style={styles.itemContainer}>
 
+        <Pressable
+        onPress={()=> handleAnimeInfo(item)}
+        >
+
         <Image source={{ uri: item.images.jpg.large_image_url }} style={styles.image} />
+        </Pressable>
+
         <View style={styles.textContainer}>
 
           <Text style={styles.titleText}>
@@ -62,7 +75,7 @@ function AnimeList({ data }) {
 
 
           <Pressable onPress={() => handleAnimeFav(
-            user,
+            currentId,
             item.title,
             item.images.jpg.large_image_url,
             item.episodes,

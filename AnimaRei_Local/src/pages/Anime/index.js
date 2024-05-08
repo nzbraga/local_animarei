@@ -2,26 +2,24 @@ import React from 'react'
 import { View, StatusBar } from 'react-native'
 
 import Header from '../../components/Header'
-import Favorites from '../../components/Favorites'
+import API from '../../components/API'
 import Version from '../../components/Version'
 
 import styles from './style'
 
+const Anime = ({route}) => {
+  const animeData = {route}
 
-const Favorite = () => {
-  
-
-
-  
+  console.log(animeData)
   return (
     <View style={styles.container} >
-      <StatusBar />
-      <Header page='Favorite'/>
-      <Favorites/>
+      <StatusBar/>    
+      <Header/>
+      
+        
       <Version/>
     </View>
   )
-  
 }
 
-export default Favorite;
+export default Anime;

@@ -8,13 +8,13 @@ import UserContext from '../../pages/UserContext';
 import Header from '../../components/Header'
 import Version from '../../components/Version';
 
-import { styles } from './style'
+import styles from './style'
 
 const Details = ({ route }) => {
 
   const navigation = useNavigation()
 
-  const { user, setUser } = useContext(UserContext)
+  const { user, currentId } = useContext(UserContext)
   const { detailsData } = route.params;  
  
   const { id, title, image, handleFavoriteData } = detailsData;
@@ -24,10 +24,10 @@ const Details = ({ route }) => {
   const [episodes, setEpisodes] = useState(detailsData.episodes)
   
 
-  function handleNewDetails(user, id, action, note, current, episodes) {
+  function handleNewDetails(currentId, id, action, note, current, episodes) {
 
-    upFavorite(user, id, action, note, Number(current), Number(episodes)).then(() => {      
-      handleFavoriteData(user)     
+    upFavorite(currentId, id, action, note, Number(current), Number(episodes)).then(() => {      
+      handleFavoriteData(currentId)     
       navigation.navigate('Favorite')
     })
   }
@@ -83,7 +83,7 @@ const Details = ({ route }) => {
 
         <Pressable 
         style={styles.button}
-        onPress={() => { handleNewDetails(user, id, 'edit', note, current, episodes) }}>
+        onPress={() => { handleNewDetails(currentId, id, 'edit', note, current, episodes) }}>
           <Text style={styles.buttonText}>Salvar</Text>
         </Pressable>
        

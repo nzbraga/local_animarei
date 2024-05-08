@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TextInput, Pressable, Text, ActivityIndicator, Alert } from "react-native";
+import { View, TextInput, Pressable, Text, ActivityIndicator, Alert, Linking, Image, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -10,9 +10,9 @@ import AnimeList from "../AnimeList";
 
 
 function API() {
-  
+
   const api = 'https://api.jikan.moe/v4/anime?q='
-  
+
   const navigation = useNavigation();
 
   const [search, setSearch] = useState('');
@@ -20,14 +20,18 @@ function API() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSearch = () => {
-    if (search === '') {
+      if (search !== '') {      
+      getData();
+      Keyboard.dismiss()
+    }  else {
       Alert.alert('insira o nome de um anime')
-    }
-    getData();
+    }  
+    setData({})   
   };
 
   const getData = async () => {
     setIsLoading(true)
+
     if (search) {
       const res = await fetch(`${api}${search}`);
       const { data } = await res.json();
@@ -59,30 +63,54 @@ function API() {
         </View>
 
       </View>
-      {data.length === null || data.length === undefined ? 
-      <>
-      <Text style={styles.att}>Notas de Atualização:</Text>
-      <Text style={styles.textAtt}></Text>
-      <Text style={styles.textAtt}> CORREÇÕES:</Text>
-      <Text style={styles.textAtt}>- limite de tamanha pra nome de usuario -</Text>
-      <Text style={styles.textAtt}>- correção de bug onde as opções do cabeçalho sumiam -</Text>
-      <Text style={styles.textAtt}>- limitando Episodios assitidos ao maximo de Episodios -</Text>
-      <Text style={styles.textAtt}></Text>
-      <Text style={styles.textAtt}> ADIÇÕES:</Text>
-      <Text style={styles.textAtt}>- Mudar nome de usuario e senha -</Text>
-      <Text style={styles.textAtt}>- visualização das anotações no Favoritos -</Text>
-      <Text style={styles.textAtt}>- controle de versão visivel no radapé -</Text>      
-      <Text style={styles.textAtt}></Text>
-      <Text style={styles.textAtt}> -- v 0.0.1 --</Text>
-      </>:
-      <View style={styles.loading}>
-        {isLoading ? <ActivityIndicator size="large" color="green" /> :
-          <AnimeList            
-            data={data}            
-          />
-        }
-      </View>
-  }
+  
+        <View style={styles.loading}>
+          {isLoading ? <ActivityIndicator style={{margin:30}} size="large" color="green" /> :
+          <>
+                {data.length === null || data.length === undefined &&
+                  <>
+                    <Text style={styles.att}>Notas de Atualização:</Text>
+                    <Text style={styles.textAtt}></Text>
+                    <Text style={styles.textAtt}> CORREÇÕES:</Text>
+                    <Text style={styles.textAtt}>- Sistema de Login refaturado -</Text>
+                    <Text style={styles.textAtt}>- Correção de bugs nos favoritos -</Text>
+          
+                    <Text style={styles.textAtt}></Text>
+                    <Text style={styles.textAtt}> ADIÇÕES:</Text>
+                    <Text style={styles.textAtt}>- Opção de Personalizar foto de usuario -</Text>
+          
+                    <Text style={styles.textAtt}></Text>
+                    <Text style={styles.textAtt}> -- v 0.0.1.1 --</Text>
+                    <Text style={styles.textAtt}></Text>
+                    <Text style={styles.textAtt}></Text>
+                    <Text style={styles.textAtt}></Text>
+          
+          
+                    <Pressable
+                      style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}
+                      onPress={() => Linking.openURL("https://api.whatsapp.com/send?phone=5521997633265")}>
+          
+                      <Image
+                        style={styles.imageZap}
+                        source={require('../../components/img/whatsapp.png')}
+                      />
+          
+                      <Text style={styles.textZap}>  Envie seu feedback  </Text>
+          
+                      <Image
+                        style={styles.imageZap}
+                        source={require('../../components/img/whatsapp.png')}
+                      />
+          
+                    </Pressable>
+          
+                  </> }
+            <AnimeList
+              data={data}
+            />
+          </>}
+        </View>
+      
     </View>
   )
 }

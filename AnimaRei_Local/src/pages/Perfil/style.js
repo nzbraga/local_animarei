@@ -1,8 +1,8 @@
 import {  StyleSheet } from "react-native";
 
-import {colors} from '../../components/colors'
+import  { colors }  from '../Style/colors'
 
-export const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: { 
     flex:1,
    
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     height: 'auto'  
   },
   input:{
-    backgroundColor:colors.backPry,
+    backgroundColor: colors.backPry,
     color: colors.darkPry,
     paddingHorizontal:10,
     margin:10

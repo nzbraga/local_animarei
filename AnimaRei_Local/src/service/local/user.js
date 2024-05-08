@@ -232,6 +232,20 @@ export const updateUserPasswordById = async (userId, newPassword) => {
   }
 };
 
+export const updateUserTheme = async (theme) => {
+  try {
+   
+        await AsyncStorage.setItem('@theme', JSON.stringify(theme));
+        console.log("upThema-novo tema: ", theme)
+        // Retorna verdadeiro para indicar sucesso
+        return true;
+     
+  } catch (error) {
+    // Em caso de erro, exibe um alerta
+    Alert.alert("Erro ao atualizar tema");
+    return false;
+  }
+};
 export const updateUserImageById = async (userId, image) => {
   try {
     // Recupera os dados existentes do armazenamento

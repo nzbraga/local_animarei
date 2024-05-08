@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-import { colors } from "../colors";
+
+import  { colors }  from "../../pages/Style/colors";
 
 export default StyleSheet.create({
   container: {
@@ -107,7 +108,7 @@ export default StyleSheet.create({
     height:30,               
     borderRadius: 20,
     backgroundColor: '(rgba(0,0,0,0.8))',
-    color:colors.backSec,
+    color: colors.backSec,
     zIndex:2,
   },
   textHideMenu:{   
@@ -115,7 +116,7 @@ export default StyleSheet.create({
     alignSelf: "center",
     textAlign: "center", 
     marginTop:2,
-    color:colors.backSec
+    color: colors.backSec
   },
   progressBox:{
     flexDirection: "row", 
