@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userImage, setUserImage] = useState(null);
   const [currentId, setCurrentId] = useState(null);
+  const [theme, setTheme] = useState('blue');
  
   
   const [userId, setUserId] = useState(1);
@@ -22,7 +23,8 @@ export const UserProvider = ({ children }) => {
       user, setUser,
       userImage, setUserImage,      
       autoIncrement,
-      currentId, setCurrentId     
+      currentId, setCurrentId,
+      theme, setTheme     
       }}>
 
       {children}

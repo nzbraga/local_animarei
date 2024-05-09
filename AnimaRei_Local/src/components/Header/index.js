@@ -2,13 +2,12 @@ import React, { useEffect, useState, useContext } from 'react'
 import { View, Pressable, Text, Image, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { loadLoginData, logOut, updateUserTheme } from '../../service/local/user';
+import { logOut } from '../../service/local/user';
 
 import UserContext from '../../pages/UserContext';
 
 import styles from './style';
-import { icons } from '../../pages/Style/icons';
-
+import { icons } from '../../components/Style/icons';
 
 const Header = ({ page }) => {
 
@@ -23,13 +22,7 @@ const Header = ({ page }) => {
     menuHide ? setMenuHide(false) : setMenuHide(true)
   }
 
-  function handleChangeTheme(color){
-    console.log(color)
-    updateUserTheme(color)
-    
-  }
-
-
+  
   function handleLogOut() {
     Alert.alert('LogOut', 'Deseja deslogar?',
       [{
@@ -88,7 +81,7 @@ const Header = ({ page }) => {
         </View>
         :
         <View style={styles.nav}>          
-         
+    
           <Pressable
             style={styles.btn}
             onPress={() => navigation.navigate('Perfil')}

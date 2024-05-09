@@ -42,7 +42,8 @@ function AnimeList({ data }) {
   }
 
   function handleAnimeInfo(anime){
-    navigation.navigate('Anime', {anime})
+    console.log(anime.url)
+    //navigation.navigate('Anime', {anime})
   }
 
   const renderItem = ({ item }) => (
@@ -93,18 +94,17 @@ function AnimeList({ data }) {
     </>
   );
   return (
-    <>
-      {isLoading ? <ActivityIndicator /> :
+    <>    
         <View style={styles.container}>
 
           <FlatList
             data={data}
             renderItem={renderItem}
             keyExtractor={(item, index) => (item.id ?? index).toString()}
-
           />
+          
         </View>
-      }
+      
     </>
   );
 }

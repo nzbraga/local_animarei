@@ -8,8 +8,8 @@ import UserContext from '../../pages/UserContext';
 
 
 import styles from './style';
-import  { colors }  from '../../pages/Style/colors';
-import { icons } from '../../pages/Style/icons';
+import  { colors }  from '../../components/Style/colors';
+import { icons } from '../../components/Style/icons';
 
 const Favorites = () => {
   

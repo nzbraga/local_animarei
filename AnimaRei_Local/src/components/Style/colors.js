@@ -1,5 +1,4 @@
 
-
 const colors = {
 
     primary: "#76F3CD",
@@ -10,8 +9,6 @@ const colors = {
     darkSec: "#1E1E1E",
     light: "#F7F7F7",
 };
-        
-   
-export { colors }
 
+export { colors }
 

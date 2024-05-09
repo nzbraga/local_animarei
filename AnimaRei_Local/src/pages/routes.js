@@ -16,8 +16,8 @@ function Routes() {
   return (   
      
         <Stack.Navigator>
-          <Stack.Screen name='Login' component={Login} options={{headerShown:false}} />
           <Stack.Screen name='Home' component={Home} options={{headerShown:false}} />
+          <Stack.Screen name='Login' component={Login} options={{headerShown:false}} />
           <Stack.Screen name='CreateLogin' component={CreateLogin} options={{headerShown:false}} />
           <Stack.Screen name='Anime' component={Anime} options={{headerShown:false}} />
           <Stack.Screen name='Perfil' component={Perfil} options={{headerShown:false}} />

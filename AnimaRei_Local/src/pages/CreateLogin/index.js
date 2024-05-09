@@ -27,7 +27,8 @@ export default function CreateLogin() {
         //console.log("handleCreate - user", res)
         let newId = autoIncrement()
         let data = {password: res.password, name, id:newId}
-        storageUserData(data).then((res)=>{    
+        storageUserData(data).then((res)=>{  
+          console.log(res)  
           if(res){
           storageLoginData(newId).then(()=>{          
               setUser(name)

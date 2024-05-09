@@ -140,8 +140,7 @@ export const loadLoginData = async () => {
     let id = JSON.parse(userId)
     
     //console.log('loadLoginData id', id)
-    let user = findUserById(id)
-   
+    let user = findUserById(id)   
     
     //console.log('loadLoginData user', user)
     if (user !== null) {      

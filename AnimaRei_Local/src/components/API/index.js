@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, TextInput, Pressable, Text, ActivityIndicator, Alert, Linking, Image, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import AttNotes from "../AttNotes";
 
 import styles from "./style";
 
@@ -67,47 +68,8 @@ function API() {
         <View style={styles.loading}>
           {isLoading ? <ActivityIndicator style={{margin:30}} size="large" color="green" /> :
           <>
-                {data.length === null || data.length === undefined &&
-                  <>
-                    <Text style={styles.att}>Notas de Atualização:</Text>
-                    <Text style={styles.textAtt}></Text>
-                    <Text style={styles.textAtt}> CORREÇÕES:</Text>
-                    <Text style={styles.textAtt}>- Sistema de Login refaturado -</Text>
-                    <Text style={styles.textAtt}>- Correção de bugs nos favoritos -</Text>
-          
-                    <Text style={styles.textAtt}></Text>
-                    <Text style={styles.textAtt}> ADIÇÕES:</Text>
-                    <Text style={styles.textAtt}>- Opção de Personalizar foto de usuario -</Text>
-          
-                    <Text style={styles.textAtt}></Text>
-                    <Text style={styles.textAtt}> -- v 0.0.1.1 --</Text>
-                    <Text style={styles.textAtt}></Text>
-                    <Text style={styles.textAtt}></Text>
-                    <Text style={styles.textAtt}></Text>
-          
-          
-                    <Pressable
-                      style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center' }}
-                      onPress={() => Linking.openURL("https://api.whatsapp.com/send?phone=5521997633265")}>
-          
-                      <Image
-                        style={styles.imageZap}
-                        source={require('../../components/img/whatsapp.png')}
-                      />
-          
-                      <Text style={styles.textZap}>  Envie seu feedback  </Text>
-          
-                      <Image
-                        style={styles.imageZap}
-                        source={require('../../components/img/whatsapp.png')}
-                      />
-          
-                    </Pressable>
-          
-                  </> }
-            <AnimeList
-              data={data}
-            />
+                {data.length === null || data.length === undefined && <AttNotes/> }
+            <AnimeList  data={data} />
           </>}
         </View>
       
