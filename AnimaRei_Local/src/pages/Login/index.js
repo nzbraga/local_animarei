@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import { storageLoginData, loadUserData } from "../../service/local/user";
 import validationUser from "../../service/validation/login";
+import ModalAlert from '../../components/ModalAlert';
 
 
 const Login = () => {
@@ -19,28 +20,36 @@ const Login = () => {
   
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalAlert, setModalAlert] = useState('')
 
 
   //logica de login
   const handleLogin = async (name, password) => {
-    validationUser(name, password).then((valid) => {
-
+    validationUser(name, password).then((res) => {
+      if(!res.status){
+        // console.log("handleLogin - valid", res.msg)
+        setModalAlert(res.msg)
+        setModalVisible(true)
+      }    
       
-      loadUserData(valid.name, valid.password).then((res) => {
+      loadUserData(res.data.name, res.data.password).then((res) => {
+         //console.log("handleLogin - load user", res)
         
-        if(!res){
-          Alert.alert('Usuario ou Senha incorreto')
-        }
-        if (res) {          
-         // console.log("hanldelogin- res",res)
+        if(!res.status){
+          //Alert.alert('Usuario ou Senha incorreto')
+          setModalAlert(res.msg)
+          setModalVisible(true)
+        } else {          
+         //console.log("handlelogin- res",res)
           setName('')
           setPassword('')
 
-          setUser(res.name)
-          setUserImage(res.image)          
-          setCurrentId(res.id)          
+          setUser(res.data.name)
+          setUserImage(res.data.image)          
+          setCurrentId(res.data.id)          
         
-          storageLoginData(res.id).then(() => {
+          storageLoginData(res.data.id).then(() => {
             navigation.navigate('Home')
           })
         }
@@ -86,9 +95,20 @@ const Login = () => {
         navigation.navigate('CreateLogin')}}>
         <Text style={styles.buttonText}>Criar</Text>
       </TouchableOpacity>
+
+      <ModalAlert modalVisible={modalVisible} setModalVisible={setModalVisible} modalAlert={modalAlert} />
+
       <Version />
     </View>
   )
 }
 
 export default Login;
+
+/*
+
+
+  
+  
+
+*/

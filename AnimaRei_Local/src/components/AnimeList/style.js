@@ -4,6 +4,7 @@ import  { colors }  from "../Style/colors";
 export default StyleSheet.create({
   container: {
     backgroundColor: colors.backSec,
+    zIndex:-1
     
   },
   itemContainer: {

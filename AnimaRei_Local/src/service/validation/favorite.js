@@ -1,3 +1,5 @@
+
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export async function checkStatus(user,title){
@@ -8,7 +10,9 @@ export async function checkStatus(user,title){
     const titleExists = existingData.some(item => item.title === title);
     //console.log(titleExists)
    
-      return titleExists
+
+      let res = {status:true , data: titleExists , msg:'Usuário não encontrado'}
+      return res;
    
 
 } 

@@ -9,7 +9,8 @@ export default StyleSheet.create({
         fontSize:20,
         marginTop:30,
         textAlign:'center',
-        color: colors.backSec
+        color: colors.backSec,
+        zIndex:-1
       },
       textAtt:{
         textAlign:'center',

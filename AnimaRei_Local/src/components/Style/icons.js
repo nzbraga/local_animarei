@@ -11,5 +11,9 @@ export const icons = {
     edit: '✍️',
     menu:'☰',  
     config:'⚙️',
-    perfil: '👤'
+    perfil: '👤',
+    theme: '🖌',
+    dark: '🌚',
+    light: '🌞',
+    green: '👽'
 }

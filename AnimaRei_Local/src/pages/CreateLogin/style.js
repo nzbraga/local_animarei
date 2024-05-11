@@ -8,7 +8,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.darkPry,
-    colors: colors.light
+    colors: colors.light,
+    zIndex:-1
   },
   title:{
     marginBottom: 14,

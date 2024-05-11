@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userImage, setUserImage] = useState(null);
   const [currentId, setCurrentId] = useState(null);
-  const [theme, setTheme] = useState('blue');
+  const [theme, setTheme] = useState('');
  
   
   const [userId, setUserId] = useState(1);

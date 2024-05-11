@@ -11,7 +11,8 @@ export default StyleSheet.create({
       alignContent:"center",      
       marginHorizontal:20,
       borderRadius:15,   
-      marginBottom:-15  
+      marginBottom:-15,
+      zIndex:-1  
       
     },
     textContainer:{

@@ -6,7 +6,8 @@ export default StyleSheet.create({
   container: {
     flex: 1,
    marginTop:10 ,
-   height:"100%"
+   height:"100%",
+   zIndex:-1
    
   }, 
   itemContainer: {

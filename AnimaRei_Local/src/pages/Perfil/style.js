@@ -8,6 +8,7 @@ export default StyleSheet.create({
    
     backgroundColor: colors.darkPry, 
     justifyContent: 'flex-end',  
+    zIndex:-1
     
   },
   scrollView:{

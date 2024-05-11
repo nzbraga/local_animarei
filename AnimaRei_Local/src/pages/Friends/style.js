@@ -5,7 +5,8 @@ import  { colors }  from '../../components/Style/colors'
 export default StyleSheet.create({
   container: {   
     backgroundColor: colors.darkPry,
-    height:"100%"
+    height:"100%",
+    zIndex:-1
   },
   textZap:{
     fontSize:20,

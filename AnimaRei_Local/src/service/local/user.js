@@ -18,8 +18,9 @@ export const storageUserData = async (data) => {
       
       if (existingUser) {
         // Se já existir um usuário com o mesmo nome, exibe um alerta
-        Alert.alert("Já existe um usuário com o mesmo nome");
-        return false;
+       //Alert.alert("Já existe um usuário com o mesmo nome");
+        let res = {status: false , msg:"Já existe um usuário com o mesmo nome"}
+        return res;
       }
     }
 
@@ -30,11 +31,14 @@ export const storageUserData = async (data) => {
     await AsyncStorage.setItem('@users', JSON.stringify(users));
     //console.log("Dados do usuário salvos localmente:", data);
     
-    return true;
+    let res = {status: true , msg:"Usuario criado com sucesso!"}
+    return res;
+
   } catch (error) {
     // Em caso de erro, exibe um alerta
-    Alert.alert("Erro ao armazenar os dados do usuário");
-    return false;
+    
+    let res = {status: false , msg:"Erro ao armazenar os dados do usuário"}
+        return res;
   }
 };
 
@@ -44,11 +48,15 @@ export const storageLoginData = async ( id ) => {
   try {
     const newId = JSON.stringify(id);
     await AsyncStorage.setItem(`@Logged`, newId);
-    //console.log("Dados do usuário salvos localmente:", newUser);
-    return true
+    //console.log("Dados do usuário salvos localmente:", newUser);    
+    let res = {status: true , msg:"Usuario logado com sucesso"}
+    return res;
+
   } catch (error) {
-    //console.log("Erro ao logar os dados do usuário:", error);
-    Alert.alert("Erro ao logar os dados do usuário")
+    //console.log("Erro ao logar os dados do usuário:", error);   
+    let res = {status: false , msg:"Erro ao logar os dados do usuário"}
+    return res;
+
   }
 };
 
@@ -72,10 +80,15 @@ export const findUserById = async (id) => {
     if (existingUser) {   
       let user = { name: existingUser.name, id: existingUser.id, image: existingUser.image };  
       //console.log(user);
-      return user;
+      
+      let res = {data: user, status:true  , msg:"Usuario encontrado com sucesso"}
+      return res;
+      
     }
   } else {
-    console.log('Usuário não encontrado');
+    //console.log('Usuário não encontrado');
+    let res = {status: false , msg:"Usuario não encontrado"}
+    return res;
   }
 }
 
@@ -95,10 +108,15 @@ export const findUserByName = async (name) => {
    if (existingUser) {   
     let user = { name: existingUser.name, id: existingUser.id, image: existingUser.image };  
     //console.log(user);
-    return user;
+    
+    let res = {data: user, status:true  , msg:"Usuario encontrado com sucesso"}
+    return res;
   }
   } else {
-    console.log('Usuário não encontrado');
+    //console.log('Usuário não encontrado');
+
+    let res = {status:false , msg:'Usuário não encontrado'}
+    return res;
   }
 }
 
@@ -117,10 +135,15 @@ export const loadUserData = async (name, password) => {
       
       if (existingUser) {
         if(existingUser.password === password){ 
-           let userData = { id:existingUser.id, name: existingUser.name , image: existingUser.image}        
-          return userData
-        }else{
-          Alert.alert("Usuario ou Senha incorreta")
+
+           let userData = { id:existingUser.id, name: existingUser.name , image: existingUser.image}
+
+          let res = {status: true, data: userData , msg:"Usuario ou Senha incorreta"}
+          return res;
+          
+        }else{          
+          let res = {status: false , msg:"Usuario ou Senha incorreta"}
+          return res;
         }
       }else{
         console.log('Usuario nao encontrado')

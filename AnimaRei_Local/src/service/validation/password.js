@@ -7,20 +7,25 @@ export default async function validationUser(user, password, passwordConfirm) {
     //console.log("validationUser",passwordConfirm)
 
     if (!user) {
-        return Alert.alert("Digite seu Nome de Usuario!");
+        let res = {status: false, msg:"Digite seu Nome de Usuario!"}
+        return res;
     }
     if (!password) {
-        return Alert.alert("Digite sua Senha!");
+        let res = {status: false, msg:"Digite sua Senha!"}
+        return res;
     }
     if (!passwordConfirm) {
-        return Alert.alert("Digite a confirmação da Senha!");
+        let res = {status: false, msg:"Digite a confirmação da Senha!"}
+          return res;
     }
     if (password !== passwordConfirm) {
-        return Alert.alert('As senhas nao coincidem');
+        let res = {status: false, msg:'As senhas nao coincidem'}
+        return res;
+
     }
 
     const newUser = { name: user, password: password};
     //console.log("validationUser", newUser)
-
-    return newUser;
+    let res = {data: newUser , status:true,  msg:"Usuario validado!"}
+    return res;
 }

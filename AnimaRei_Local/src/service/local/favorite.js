@@ -11,17 +11,24 @@ export const storageFavoriteData = async (userId, newFavoriteData) => {
     const titleExists = existingData.some(item => item.title === newFavoriteData.title);
 
     if (titleExists) {
-      Alert.alert("Este título já está nos favoritos.");
-      return; // Do not proceed further
+      // console.log("Este título já está nos favoritos.");
+
+      let res = { status: false, msg: "Este título já está nos favoritos." }
+      return res;
     }
 
     const mergedData = [...existingData, newFavoriteData];
 
     await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(mergedData));
-    Alert.alert("Atualizado com sucesso!");
+
     //console.log("Favoritos salvos localmente:", mergedData, ">>>", user);
+    let res = { status: true, msg: "Atualizado com sucesso!" }
+    return res;
+
   } catch (error) {
-    console.log("Erro ao armazenar os dados do favorito:", error);
+    //console.log("Erro ao armazenar os dados do favorito:", error);
+    let res = { status: false, msg: "Erro ao armazenar os dados do favorito" }
+    return res;
   }
 };
 
@@ -32,18 +39,25 @@ export const loadFavoriteData = async (userId) => {
     const FavoriteData = await AsyncStorage.getItem(`@Fav${userId}`);
     if (FavoriteData !== null && FavoriteData !== undefined) {
       //console.log("Favoritos carregados:", FavoriteData);
-      return JSON.parse(FavoriteData);
+      let data = JSON.parse(FavoriteData);
+
+      let res = { status: true, data, msg: "Favoritos carregados com sucesso" }
+      return res
+
     } else {
       //console.log("Não há Favoritos armazenados localmente.");
-      return null;
+
+      let res = { status: false, msg: "Não há Favoritos armazenados localmente." }
+      return res
     }
   } catch (error) {
-    console.error('Erro ao carregar os Favoritos:', error);
-    return null;
+    //console.error('Erro ao carregar os Favoritos:', error);
+
+    let res = { status: false, msg: "Erro ao carregar os Favoritos" }
+    return res
+
   }
 };
-
-
 
 export const upFavorite = async (userId, id, action, note, current, episodes) => {
   try {
@@ -63,16 +77,22 @@ export const upFavorite = async (userId, id, action, note, current, episodes) =>
             await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
           }
           break;
-        case 'edit':         
-        if (userData[id].currentEpisode <= userData[id].episodes && current <= episodes) {
-          userData[id].note = note
-          userData[id].episodes = episodes
-          userData[id].currentEpisode = current
-          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
-          return Alert.alert("Atualizado com sucesso")
-        } else {
-          return Alert.alert('Episodio Atual nao pode ser maior que o numero de Episodios ')
-        }
+        case 'edit':
+          if (userData[id].currentEpisode <= userData[id].episodes && current <= episodes) {
+            userData[id].note = note
+            userData[id].episodes = episodes
+            userData[id].currentEpisode = current
+            await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+
+            let res = { status: true, msg: "Atualizado com sucess" }
+            return res
+
+          } 
+          if(userData[id].currentEpisode > userData[id].episodes && current > episodes) {
+            let res = { status: true, msg: "Episodio Atual nao pode ser maior que o numero de Episodios" }
+            return res
+          }
+          console.log("edit upFav - CONFERIR LOGICA MODIFICADA")
           break;
         case 'complite':
           userData[id].currentEpisode = userData[id].episodes
@@ -89,28 +109,38 @@ export const upFavorite = async (userId, id, action, note, current, episodes) =>
           break;
 
         default:
-          // Caso de ação não reconhecida
-          throw new Error('Ação não reconhecida');
+        console.log('action necessario')
       }
 
     } else {
       // Se não houver dados para esse usuário
-      throw new Error('Usuário não encontrado');
+    
+      let res = { status: false, msg: "Usuário não encontrado" }
+      return res
+      
     }
   } catch (error) {
-    console.error('Erro ao atualizar favorito:', error.message);
-    throw error;
+    //console.error('Erro ao atualizar favorito: ', error.message);
+    let res = { status: false, msg: "Erro ao atualizar favorito" }
+    return res
   }
 };
 
-export const removeFavList = async (userId) =>{
-  AsyncStorage.removeItem(`@Fav${userId}`)
+export const removeFavList = async (userId) => {
+  try {
+    AsyncStorage.removeItem(`@Fav${userId}`)
+    let res = {status:true , msg:"Favoritos removidos com sucesso"}
+      return res;
+  } catch (error) {
+    //console.log("Erro ao remover os Favoritos.", error)
+    let res = {status:false , msg:"Erro ao remover os Favoritos."}
+    return res;
+  }
 }
-
 
 export const allKeys = async () => {
   try {
-    const keys = await AsyncStorage.getAllKeys();   
+    const keys = await AsyncStorage.getAllKeys();
     return keys;
   } catch (error) {
     console.error('Error fetching keys from AsyncStorage:', error);

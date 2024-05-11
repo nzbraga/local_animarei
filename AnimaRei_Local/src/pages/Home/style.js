@@ -1,12 +1,11 @@
+// style.js
 import { StyleSheet } from "react-native";
+import { getColor } from "../../components/Style/colors2";
 
-import { colors } from "../../components/Style/colors";
-
-export default StyleSheet.create({
-  container:{
-        backgroundColor: colors.darkPry, 
-        height: "100%"
-    }
+export const style = (theme) => StyleSheet.create({
+  container: {
+    backgroundColor: getColor(theme).darkPry, 
+    height: "100%",
+    zIndex:-1
+  }
 });
-
-

@@ -31,9 +31,9 @@ const Favorites = () => {
 
   function handleFavoriteData(currentId) {
     loadFavoriteData(currentId).then((res) => {
-      //console.log("handle fav data",res)
-      if (res) {
-        setLists(res.map(item => ({ ...item, hideMenu: false })));
+      console.log("handle fav data",res)
+      if (res.status) {
+        setLists(res.data.map(item => ({ ...item, hideMenu: false })));
       }
     });
   }

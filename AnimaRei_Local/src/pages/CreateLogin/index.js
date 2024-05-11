@@ -9,27 +9,40 @@ import UserContext from "../UserContext";
 import { storageUserData, storageLoginData } from "../../service/local/user";
 import validationUser from "../../service/validation/user";
 
+import ModalAlert from '../../components/ModalAlert';
+
+
+
 export default function CreateLogin() {
-
+  
   const navigation = useNavigation()
-
+  
   const { setUser, autoIncrement, setCurrentId } = useContext(UserContext)
   
-
+  
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalAlert, setModalAlert] = useState('')
+
   async function handleCreateUser(name, password, passwordConfirm) {
    
     await validationUser(name, password, passwordConfirm).then((res)=>{
-      if(res){
-        //console.log("handleCreate - user", res)
+      if(!res.status){
+       // console.log("handleCreate - valid", res.msg)
+        setModalAlert(res.msg)
+        setModalVisible(true)
+        
+      }
+      if(res.data){
+        //console.log("handleCreate - user", res)       
         let newId = autoIncrement()
-        let data = {password: res.password, name, id:newId}
+        let data = {password: res.data.password, name: res.data.name, id:newId}
         storageUserData(data).then((res)=>{  
-          console.log(res)  
-          if(res){
+         // console.log(res)  
+          if(res.status){
           storageLoginData(newId).then(()=>{          
               setUser(name)
               setCurrentId(newId)
@@ -86,9 +99,8 @@ export default function CreateLogin() {
       <Pressable style={styles.button} onPress={() => navigation.navigate("Login")}>
         <Text style={styles.buttonText}> Logar </Text>
       </Pressable>
+      <ModalAlert modalVisible={modalVisible} setModalVisible={setModalVisible} modalAlert={modalAlert} />
       <Version/>
     </View>
   )
 }
-
-

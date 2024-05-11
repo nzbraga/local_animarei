@@ -5,18 +5,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default async function validationUser(name, newName, password) {
 
     if (!name) {
-        return Alert.alert("Digite seu Nome de Usuario!");
-    }
 
-    if (newName === name) {
-        return Alert.alert("Digite um nome de usuario diferente do atual!");
+        let res = { status: false, msg: "Digite seu Nome de Usuario!" }
+        return res;
     }
     if (!password) {
-        return Alert.alert("Digite sua Senha!");
+
+        let res = { status: false, msg: "Digite sua Senha!" }
+        return res;
+
+    }
+    if (newName === name) {
+
+        let res = { status: false, msg: "Digite um nome de usuario diferente do atual!" }
+        return res;
+
     }
 
-    const newUser = { name, password: password, newName};
+    const newUser = { name, password: password, newName };
     //console.log("validationUser", newUser)
-
-    return newUser;
+   
+    let res = {data: newUser , status:true , msg:'Usuário não encontrado'}
+    return res;
 }

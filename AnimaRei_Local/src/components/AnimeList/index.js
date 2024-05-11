@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, FlatList, Image, Pressable, ActivityIndicator, Alert } from "react-native";
+import { View, Text, FlatList, Image, Pressable } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 import UserContext from '../../pages/UserContext'
@@ -12,13 +12,12 @@ import styles from "./style";
 function AnimeList({ data }) {
 
   const { user, currentId } = useContext(UserContext)
-  const [isLoading, setIsLoading] = useState(false)
   
   const navigation = useNavigation()
 
   async function handleAnimeFav(currentId, title, images, episodes) {
    
-    //console.log("handleFAv:", currentId)
+    console.log("handleFAv:", currentId)
     const currentEpisode = 0
     const note = ''
 
@@ -27,8 +26,8 @@ function AnimeList({ data }) {
       let favoriteData = { title, images, episodes, note, currentEpisode }
 
       if (favoriteData) {
-        storageFavoriteData(currentId, favoriteData).then(() => {
-        
+        storageFavoriteData(currentId, favoriteData).then((res) => {
+        console.log(res)
         });
       }
     }

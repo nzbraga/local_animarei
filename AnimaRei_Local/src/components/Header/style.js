@@ -9,7 +9,9 @@ export default StyleSheet.create({
     margin:10,
     borderRadius:15,   
     height: 70,
-    justifyContent:'space-between'
+    width:'95%',
+    justifyContent:'space-between',
+    //position: 'absolute'
         
   },  
   logo:{
@@ -70,5 +72,13 @@ export default StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  themeMenu: {
+    position: 'absolute',
+    backgroundColor:colors.primary,
+    top: 40,
+    zIndex:999,
+    borderBottomLeftRadius:30,
+    borderBottomRightRadius:30
+  }
 });
 

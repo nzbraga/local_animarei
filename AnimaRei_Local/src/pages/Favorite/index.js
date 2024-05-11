@@ -7,12 +7,8 @@ import Version from '../../components/Version'
 
 import styles from './style'
 
-
 const Favorite = () => {
-  
-
-
-  
+    
   return (
     <View style={styles.container} >
       <StatusBar />
