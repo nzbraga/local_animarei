@@ -1,70 +1,88 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, Image, Pressable, Alert } from 'react-native';
+import { View, Text, FlatList, Image, Pressable } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 import { loadFavoriteData, upFavorite } from '../../service/local/favorite';
 import { useNavigation } from '@react-navigation/native';
 import UserContext from '../../pages/UserContext';
 
+import ModalConfirm from '../ModalConfirm';
+import ModalAlert from '../../components/ModalAlert';
 
-import styles from './style';
-import  { colors }  from '../../components/Style/colors';
+import { styles } from './style';
+import { getColor } from '../Style/colors';
+
 import { icons } from '../../components/Style/icons';
 
 const Favorites = () => {
-  
+
   const navigation = useNavigation()
 
-  const { user, currentId} = useContext(UserContext)
-  const [ lists, setLists ] = useState([]);
-    
-  useEffect(() => {  
-    if(lists.length === 0){
-      handleFavoriteData(currentId);
-    }
+  const { currentId, theme } = useContext(UserContext)
+  const [lists, setLists] = useState([]);
+
+ 
+  const [modalArgument, setModalArgument] = useState(false);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalVisibleConfirm, setModalVisibleConfirm] = useState(false);
+  const [modalAlert, setModalAlert] = useState('')
+  const [modalText, setModalText] = useState('')
+  const [modalId, setModalId] = useState('')
+  const [modalAction, setModalAction] = useState('')
+  
+ 
+  useEffect(() => {
+    handleFavoriteData(currentId);
+
   }, []);
-
-  function handleDetails(id, title, image, note, current, episodes){
-    const detailsData = {id, title, image, note, current, episodes, handleFavoriteData}
-    navigation.navigate('Details', { detailsData });
+  function handleDetails(id, title, image, note, current, episodes) {
+    navigation.navigate('Details', {
+      detailsData: {
+        id, title, image, note, current, episodes
+      }
+      
+    });
   }
-
   function handleFavoriteData(currentId) {
     loadFavoriteData(currentId).then((res) => {
-      console.log("handle fav data",res)
+      //console.log("handle fav data",res)
       if (res.status) {
         setLists(res.data.map(item => ({ ...item, hideMenu: false })));
       }
     });
-  }
-
+  } 
+  function handleDeleteFavoriteData( id, action) {
   
-  function handleDeleteFavoriteData(currentId, id, action){
-    Alert.alert('Excluir','Deseja Remover o anime da lista?',
-      [{ text: 'Yes', onPress: () => 
-        {
-          handleUpFavorite(currentId,id, action)
+    setModalId(id)
+    setModalAction(action)
+    setModalText('Deseja remover da lista?')
+    setModalVisibleConfirm(true)
+    
+  }
+  async function handleUpFavorite(currentId, id, action) {
+
+    await upFavorite(currentId, id, action).then((res) => {
+      
+      if (!res.status) {
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
+      }
+      if (res.status) {
+        if(res.msg){
+          setModalAlert(res.msg)
+          setModalVisibleAlert(true)
         }
-      },{ text: 'No' },],
-      { cancelable: false }      
-    );
-   
-  }
-
-  async function handleUpFavorite(currentId,id,action){
-    await upFavorite(currentId,id,action).then((res)=>{
-     // console.log("handleUpFav -- ", res)
-      handleFavoriteData(currentId)
+      }
     })
-  }
 
+    handleFavoriteData(currentId)
+  }
   function handleProgress(current, total) {
     const currentNumber = Number(current);
     const totalNumber = Number(total);
     const progress = currentNumber / totalNumber;
     return progress;
   }
-
   function toggleMenu(index) {
     setLists(prevLists => {
       return prevLists.map((list, i) => {
@@ -76,103 +94,110 @@ const Favorites = () => {
     });
   }
 
-  
   return (
-    <View style={styles.container}>
-      {lists.length === 0 ? 
-      <>
-      <Text style={styles.titleText}> Adicione animes aos Favoritos clicando no  🤍</Text>
-      <Text style={styles.titleText}> e eles apareceram aqui</Text>
-      </>
-      :
-      <FlatList
-        data={lists}
-        keyExtractor={(item, index) => (item.id ?? index).toString()}
-        renderItem={({ item, index }) => (
-          <View style={styles.itemContainer}>
+    <>
 
-            <Image source={{ uri: item.images }} style={styles.image} />
-            {!item.hideMenu ?
+      <View style={styles(theme).container}>
+        {lists.length === 0 ?
+          <>
+            <Text style={styles(theme).titleText}> Adicione animes aos Favoritos clicando no  🤍</Text>
+            <Text style={styles(theme).titleText}> e eles apareceram aqui</Text>
+          </>
+          :
+          <>
 
-              <View style={styles.hideMenu}>                         
-               <Pressable onPress={() => toggleMenu(index)}>
-                  <Text style={styles.textHideMenu}>{icons.menu}</Text>
-                </Pressable>
-              </View> :
-             
-                <View style={styles.buttonContainer}>
-              
-            
-                <Pressable
-                  style={styles.button}
-                  onPress={() => {handleDetails(index, item.title, item.images ,item.note,  item.currentEpisode, item.episodes)}}>
-                  <Text style={styles.buttonText}>{icons.edit}</Text>
-                </Pressable>
+            <FlatList
+              data={lists}
+              keyExtractor={(item, index) => (item.id ?? index).toString()}
+              renderItem={({ item, index }) => (
+                <View style={styles(theme).itemContainer}>
 
-                <Pressable
-                  style={styles.button}
-                  onPress={() => {handleUpFavorite(currentId,index, 'complite') }}>
-                  <Text style={styles.buttonText}>{icons.complite}</Text>
-                </Pressable>
+                  <Image source={{ uri: item.images }} style={styles(theme).image} />
+                  {!item.hideMenu ?
 
-                <Pressable
-                  style={styles.button}
-                  onPress={() => {handleUpFavorite(currentId,index, 'clear') }}>
-                  <Text style={styles.buttonText}>{icons.clear}</Text>
-                </Pressable>
+                    <View style={styles(theme).hideMenu}>
+                      <Pressable onPress={() => toggleMenu(index)}>
+                        <Text style={styles(theme).textHideMenu}>{icons.menu}</Text>
+                      </Pressable>
+                    </View> :
 
-                <Pressable
-                  style={styles.button}
-                  onPress={() => {handleDeleteFavoriteData(currentId, index, 'delete') }}>
-                  <Text style={styles.buttonClose}>{icons.delete}</Text>
-                </Pressable>
-
-                <Pressable
-                  style={styles.button}
-                  onPress={() => toggleMenu(index)}>
-                  <Text style={styles.buttonText}>{icons.menu}</Text>
-                </Pressable>
-                
-              
-              </View>
-
-            }
+                    <View style={styles(theme).buttonContainer}>
 
 
-            <View style={styles.textContainer}>
-              <Text style={styles.titleText}>{item.title}</Text>              
-              {item.note && <Text style={styles.textNote}>Anotação: {item.note}</Text>}
-              <View style={styles.progressBox}>
-              <Pressable style={styles.buttonSide}
-                  onPress={() => {handleUpFavorite(currentId,index, '-') }}
-                >
-                  <Text style={styles.buttonSideText}>{icons.backward}</Text>
-                </Pressable>
+                      <Pressable
+                        style={styles(theme).button}
+                        onPress={() => { handleDetails(index, item.title, item.images, item.note, item.currentEpisode, item.episodes) }}>
+                        <Text style={styles(theme).buttonText}>{icons.edit}</Text>
+                      </Pressable>
 
-                <Progress.Bar
-                  style={styles.progress}
-                  progress={handleProgress(item.currentEpisode, item.episodes)}
-                  color={ colors.primary}
-                  height={30}
-                  width={300}
-                />
-                
-                <Pressable
-                  style={styles.buttonSide}
-                  onPress={() => {handleUpFavorite(currentId,index, '+') }}>
-                  <Text style={styles.buttonSideText}>{icons.forward}</Text>
-                </Pressable>
-              </View>
-                <Text style={styles.titleBar}>
-                  {item.currentEpisode} / {item.episodes}
-                </Text>
+                      <Pressable
+                        style={styles(theme).button}
+                        onPress={() => { handleUpFavorite(currentId, index, 'complite') }}>
+                        <Text style={styles(theme).buttonText}>{icons.complite}</Text>
+                      </Pressable>
 
-            </View>
-          </View>
-        )}
-      />
-      }
-    </View>
+                      <Pressable
+                        style={styles(theme).button}
+                        onPress={() => { handleUpFavorite(currentId, index, 'clear') }}>
+                        <Text style={styles(theme).buttonText}>{icons.clear}</Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={styles(theme).button}
+                        onPress={() => { handleDeleteFavoriteData(index, 'delete') }}>
+                        <Text style={styles(theme).buttonClose}>{icons.delete}</Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={styles(theme).button}
+                        onPress={() => toggleMenu(index)}>
+                        <Text style={styles(theme).buttonText}>{icons.menu}</Text>
+                      </Pressable>
+
+
+                    </View>
+
+                  }
+
+
+                  <View style={styles(theme).textContainer}>
+                    <Text style={styles(theme).titleText}>{item.title}</Text>
+                    {item.note && <Text style={styles(theme).textNote}>Anotação: {item.note}</Text>}
+                    <View style={styles(theme).progressBox}>
+                      <Pressable style={styles(theme).buttonSide}
+                        onPress={() => { handleUpFavorite(currentId, index, '-') }}
+                      >
+                        <Text style={styles(theme).buttonSideText}>{icons.backward}</Text>
+                      </Pressable>
+
+                      <Progress.Bar
+                        style={styles(theme).progress}
+                        progress={handleProgress(item.currentEpisode, item.episodes)}
+                        color={getColor(theme).base}
+                        height={30}
+                        width={300}
+                      />
+
+                      <Pressable
+                        style={styles(theme).buttonSide}
+                        onPress={() => { handleUpFavorite(currentId, index, '+') }}>
+                        <Text style={styles(theme).buttonSideText}>{icons.forward}</Text>
+                      </Pressable>
+                    </View>
+                    <Text style={styles(theme).titleBar}>
+                      {item.currentEpisode} / {item.episodes}
+                    </Text>
+
+                  </View>
+                </View>
+              )}
+            />
+            <ModalAlert modalVisible={modalVisibleAlert} setModalVisible={setModalVisibleAlert} modalAlert={modalAlert} />        
+            <ModalConfirm modalVisible={modalVisibleConfirm} setModalVisible={setModalVisibleConfirm} modalText={modalText} action={()=> handleUpFavorite(currentId, modalId, modalAction)} />
+          </>
+        }
+      </View>
+    </>
   );
 };
 

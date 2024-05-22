@@ -1,19 +1,18 @@
 import {  StyleSheet } from "react-native";
+import { getColor }  from '../../components/Style/colors'
 
-import  { colors }  from '../../components/Style/colors'
-
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   container: { 
     flex:1,
    
-    backgroundColor: colors.darkPry, 
+    backgroundColor: getColor(theme).oppBase, 
     justifyContent: 'flex-end',  
     zIndex:-1
     
   },
   scrollView:{
     flex:1,
-    backgroundColor: colors.darkPry, 
+    backgroundColor: getColor(theme).oppBase, 
     
   },
   title:{
@@ -22,29 +21,29 @@ export default StyleSheet.create({
     alignSelf: "center",
     textAlign: "center",
     width: '80%',
-    color: colors.backSec  
+    color: getColor(theme).neut  
   },
   text:{
     marginHorizontal:10,
-    color: colors.primary
+    color: getColor(theme).base
   },
   button: {
     padding: 8,
     marginVertical:20,
     marginHorizontal: 20,
-    backgroundColor: colors.primary,
+    backgroundColor: getColor(theme).base,
     borderRadius: 5,
   },
   buttonRed: {
     padding: 8,
     marginVertical:20,
     marginHorizontal: 20,
-    backgroundColor: colors.alert,
+    backgroundColor: getColor(theme).warn,
     borderRadius: 5,
   },
   buttonText: {
     textAlign:'center',
-    color: colors.darkPry,
+    color: getColor(theme).oppBase,
     fontSize: 16,
   },
   containerInput:{
@@ -60,8 +59,8 @@ export default StyleSheet.create({
     height: 'auto'  
   },
   input:{
-    backgroundColor: colors.backPry,
-    color: colors.darkPry,
+    backgroundColor: getColor(theme).sec,
+    color: getColor(theme).oppBase,
     paddingHorizontal:10,
     margin:10
 

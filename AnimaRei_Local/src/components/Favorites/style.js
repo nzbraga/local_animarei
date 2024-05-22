@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
+import { getColor }  from "../../components/Style/colors";
 
-import  { colors }  from "../../components/Style/colors";
-
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   container: {
-    flex: 1,
+  flex: 1,
    marginTop:10 ,
    height:"100%",
+   backgroundColor: getColor(theme).oppBase,
    zIndex:-1
    
   }, 
@@ -29,49 +29,49 @@ export default StyleSheet.create({
     bottom: 0,   
     paddingTop:10,
     paddingBottom:10,
-    backgroundColor: '(rgba(0,0,0,0.6))',   
+    backgroundColor: '(rgba(0,0,0,0.9))',   
     borderBottomWidth:1,
-    borderBottomColor: colors.primary,   
+    borderBottomColor: getColor(theme).base,   
   },  
   titleText:{
     fontSize: 20,
     alignSelf: "center",
     textAlign: "center",
     width: '80%',
-    color: colors.backSec
+    color: getColor(theme).light
   },
   textNote:{
     fontSize: 15,
     alignSelf: "center",
     textAlign: "center",
     width: '80%',
-    color: colors.backSec
+    color: getColor(theme).light
   },
   titleBar:{
     fontSize: 18,
     alignSelf: "center",
     textAlign: "center",
     bottom:15,
-    color: colors.darkPry,
+    color: getColor(theme).oppBase,
     position:'absolute',
   },
   episodeText: {
     fontSize: 15,
     textAlign: "center",
-    color: colors.backSec       
+    color: getColor(theme).neut       
   },
   button: {        
     borderRadius: 25,
     width: 50,
     height:50,            
     marginTop:5,    
-    backgroundColor: '(rgba(0,0,0,0.7))',
+    backgroundColor: '(rgba(0,0,0,0.9))',
   },   
   buttonText: {  
     fontSize: 25,
     textAlign:"center",    
     margin:6,
-    color: colors.backPry 
+    color: getColor(theme).sec 
   },  
   buttonClose: {  
     marginTop:7,
@@ -93,13 +93,13 @@ export default StyleSheet.create({
     margin:5,    
     alignSelf: "center",
     textAlign: "center",             
-    backgroundColor: '(rgba(0,0,0,0.7))',
+    backgroundColor: '(rgba(0,0,0,0.9))',
   }, 
   buttonSideText: {  
     fontSize: 20,    
     alignSelf: "center",
     textAlign: "center",    
-    color: colors.backPry 
+    color: getColor(theme).light 
   }, 
   hideMenu:{
     position: 'absolute',
@@ -108,8 +108,8 @@ export default StyleSheet.create({
     width: 30,
     height:30,               
     borderRadius: 20,
-    backgroundColor: '(rgba(0,0,0,0.8))',
-    color: colors.backSec,
+    backgroundColor: '(rgba(0,0,0,0.9))',
+    color: getColor(theme).neut,
     zIndex:2,
   },
   textHideMenu:{   
@@ -117,7 +117,7 @@ export default StyleSheet.create({
     alignSelf: "center",
     textAlign: "center", 
     marginTop:2,
-    color: colors.backSec
+    color: getColor(theme).neut
   },
   progressBox:{
     flexDirection: "row", 
@@ -125,6 +125,6 @@ export default StyleSheet.create({
     height: 30
   },
   progress:{    
-    backgroundColor: colors.backPry   
+    backgroundColor: getColor(theme).sec   
   },
 });

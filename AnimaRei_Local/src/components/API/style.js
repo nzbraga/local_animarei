@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 
-import  { colors }  from  '../Style/colors'
+import { getColor }  from  '../Style/colors'
 
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
     container: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -27,16 +27,16 @@ export default StyleSheet.create({
       backgroundColor: 'white',
       borderRadius: 5,
       borderWidth: 1,
-      borderColor: colors.backSec,
+      borderColor: getColor(theme).sec,
     },
     button: {
       padding: 8,
       marginLeft: 10,
-      backgroundColor: colors.primary,
+      backgroundColor: getColor(theme).base,
       borderRadius: 5,
     },
     buttonText: {
-      color: colors.darkPry,
+      color: getColor(theme).oppBase,
       fontSize: 16,
     },
     loading:{

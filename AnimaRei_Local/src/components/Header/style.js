@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native';
-import  { colors }  from '../Style/colors'
+import { StyleSheet } from "react-native";
+import { getColor } from "../../components/Style/colors";
 
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   
   header: {
     flexDirection: 'row', 
-    backgroundColor: colors.primary,    
+    backgroundColor: getColor(theme).base,    
     margin:10,
     borderRadius:15,   
     height: 70,
     width:'95%',
     justifyContent:'space-between',
-    //position: 'absolute'
-        
+    //position: 'absolute',
+    zIndex:999        
   },  
   logo:{
     width: 35,
@@ -27,16 +27,13 @@ export default StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    alignItems: 'center',    
-    alignSelf:"center",
-    alignContent:"center" ,
-    
+    alignItems: 'center',
   },
   btn:{
-    backgroundColor: colors.primary,
+    backgroundColor: getColor(theme).base,
     padding:5,
     margin:5,
-    borderRadius:30,
+    borderRadius:30,    
     width:35,
     height:35,
     alignItems: 'center',
@@ -45,7 +42,7 @@ export default StyleSheet.create({
     alignContent:"center"
   },
   btnPlus:{
-    backgroundColor: colors.backPry,
+    backgroundColor: getColor(theme).sec,    
     padding:5,
     margin:5,
     borderRadius:30,
@@ -60,7 +57,7 @@ export default StyleSheet.create({
     fontSize: 18,     
     fontWeight: 'bold',
     paddingLeft: 5,
-    color: colors.darkPry,
+    color: getColor(theme).oppBase,
     //maxWidth:150,
     maxHeight:25    
   },
@@ -74,7 +71,7 @@ export default StyleSheet.create({
   },
   themeMenu: {
     position: 'absolute',
-    backgroundColor:colors.primary,
+    backgroundColor:getColor(theme).base,
     top: 40,
     zIndex:999,
     borderBottomLeftRadius:30,

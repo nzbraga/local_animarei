@@ -3,73 +3,85 @@ import { View, Text, FlatList, Image, Pressable } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 import UserContext from '../../pages/UserContext'
-
+import ModalAlert from '../../components/ModalAlert';
 import { storageFavoriteData } from "../../service/local/favorite";
 
-import styles from "./style";
+import {styles} from "./style";
+
 //import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AnimeList({ data }) {
 
-  const { user, currentId } = useContext(UserContext)
+  const { currentId, theme } = useContext(UserContext)
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalAlert, setModalAlert] = useState('')
   
   const navigation = useNavigation()
 
   async function handleAnimeFav(currentId, title, images, episodes) {
+       
+   const currentEpisode = 0
    
-    console.log("handleFAv:", currentId)
-    const currentEpisode = 0
     const note = ''
 
     if (episodes === null) {
       episodes = 1
       let favoriteData = { title, images, episodes, note, currentEpisode }
 
+      //console.log("🚀 ~ handleAnimeFav ~ favoriteData:", favoriteData)
       if (favoriteData) {
         storageFavoriteData(currentId, favoriteData).then((res) => {
-        console.log(res)
+        //console.log(res)
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
         });
       }
     }
 
     let favoriteData = { title, images, episodes, note, currentEpisode }
 
+    //console.log("🚀 ~ handleAnimeFav ~ favoriteData:", favoriteData)
     if (favoriteData) {
-      storageFavoriteData(currentId, favoriteData)
+      storageFavoriteData(currentId, favoriteData).then((res) => {
+        //console.log(res)
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
+        });
+
     }
 
   }
 
   function handleAnimeInfo(anime){
-    console.log(anime.url)
+    console.log("AnimeInfo",anime.url)
     //navigation.navigate('Anime', {anime})
   }
 
   const renderItem = ({ item }) => (
     <>
 
-      <View style={styles.itemContainer}>
+      <View style={styles(theme).itemContainer}>
 
         <Pressable
         onPress={()=> handleAnimeInfo(item)}
         >
 
-        <Image source={{ uri: item.images.jpg.large_image_url }} style={styles.image} />
+        <Image source={{ uri: item.images.jpg.large_image_url }} style={styles(theme).image} />
         </Pressable>
 
-        <View style={styles.textContainer}>
+        <View style={styles(theme).textContainer}>
 
-          <Text style={styles.titleText}>
+          <Text style={styles(theme).titleText}>
             {item.title}
           </Text>
 
           {item.episodes > 1 ?
             <>
-              <Text style={styles.episodeText}>Episodes: {item.episodes}</Text>
+              <Text style={styles(theme).episodeText}>Episodes: {item.episodes}</Text>
             </>
             :
             <>
-              <Text style={styles.episodeText}> OVA / Filme </Text>
+              <Text style={styles(theme).episodeText}> OVA / Filme </Text>
             </>}
 
 
@@ -80,7 +92,7 @@ function AnimeList({ data }) {
             item.images.jpg.large_image_url,
             item.episodes,
 
-          )} style={styles.starContainer}>
+          )} style={styles(theme).starContainer}>
 
             <Text>🤍</Text>
           </Pressable>
@@ -94,8 +106,9 @@ function AnimeList({ data }) {
   );
   return (
     <>    
-        <View style={styles.container}>
-
+        <ModalAlert modalVisible={modalVisibleAlert} setModalVisible={setModalVisibleAlert} modalAlert={modalAlert} />
+        <View style={styles(theme).container}>
+          
           <FlatList
             data={data}
             renderItem={renderItem}
@@ -109,3 +122,12 @@ function AnimeList({ data }) {
 }
 
 export default AnimeList;
+
+/*
+
+
+ 
+  
+
+
+*/

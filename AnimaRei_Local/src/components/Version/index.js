@@ -1,11 +1,17 @@
+import React, {useContext} from 'react';
 import { Text, View } from 'react-native';
-import style from './style';
+import {styles} from './style';
+
+import UserContext from '../../pages/UserContext';
 
 const Version = () => {
+
+  const { theme } = useContext(UserContext);
+
   return (
-    <View style={style.container}>
+    <View style={styles(theme).container}>
       
-    <Text style={style.text}>version 0.0.1.1</Text>
+    <Text style={styles(theme).text}>version 0.0.1.1</Text>
     </View>
   )
 }

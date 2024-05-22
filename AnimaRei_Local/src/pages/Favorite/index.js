@@ -1,16 +1,20 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { View, StatusBar } from 'react-native'
 
 import Header from '../../components/Header'
 import Favorites from '../../components/Favorites'
 import Version from '../../components/Version'
 
-import styles from './style'
+import UserContext from '../UserContext'
+
+import {styles} from './style'
 
 const Favorite = () => {
+
+  const { theme } = useContext(UserContext);
     
   return (
-    <View style={styles.container} >
+    <View style={styles(theme).container} >
       <StatusBar />
       <Header page='Favorite'/>
       <Favorites/>

@@ -11,18 +11,10 @@ export const UserProvider = ({ children }) => {
   const [theme, setTheme] = useState('');
  
   
-  const [userId, setUserId] = useState(1);
-
-  const autoIncrement = ()=>{
-    setUserId(userId +1)
-    return userId
-  }
-
   return (
     <UserContext.Provider value={{
       user, setUser,
-      userImage, setUserImage,      
-      autoIncrement,
+      userImage, setUserImage,
       currentId, setCurrentId,
       theme, setTheme     
       }}>
@@ -33,3 +25,11 @@ export const UserProvider = ({ children }) => {
 };
 
 export default UserContext;
+
+
+/*
+import UserContext from '../UserContext';
+
+const { theme } = useContext(UserContext);
+
+*/

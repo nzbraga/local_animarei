@@ -1,45 +1,59 @@
 import { StyleSheet } from "react-native";
+import { getColor }  from '../../components/Style/colors'
 
-import  { colors }  from '../../components/Style/colors'
-
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   container: { 
     flex:1,
    
-    backgroundColor: colors.darkPry, 
+    backgroundColor: getColor(theme).oppBase, 
     justifyContent: 'flex-end',  
     zIndex:-1
     
   },
   scrollView:{
     flex:1,
-    backgroundColor: colors.darkPry, 
+    backgroundColor: getColor(theme).oppBase, 
     
   },
   containerEp: {   
    flexDirection: 'row'
   },
-  title:{
+  image:{
+    width: 350,
+    height: 500,
+    alignSelf:'center'
+
+  },
+    title:{
     fontSize: 25,
     marginTop: 10,
     alignSelf: "center",
     textAlign: "center",
     width: '80%',
-    color: colors.backSec  
+    color: getColor(theme).neut  
   },
   text:{
-    color: colors.primary
+    color: getColor(theme).base
   },
   button: {
     padding: 8,
     marginVertical:20,
     marginHorizontal: 20,
-    backgroundColor: colors.primary,
+    backgroundColor: getColor(theme).base,
     borderRadius: 5,
+    width:150,
+  },
+  buttonBack: {
+    padding: 8,
+    marginVertical:20,
+    marginHorizontal: 20,
+    backgroundColor: getColor(theme).warn,
+    borderRadius: 5,
+    width:150,
   },
   buttonText: {
     textAlign:'center',
-    color: colors.darkPry,
+    color: getColor(theme).oppBase,
     fontSize: 16,
   },
   containerInput:{
@@ -53,10 +67,14 @@ export default StyleSheet.create({
     height: 'auto'  
   },
   input:{
-    backgroundColor: colors.backPry,
-    color: colors.darkPry,
+    backgroundColor: getColor(theme).sec,
+    color: getColor(theme).oppBase,
     paddingHorizontal:10
 
+  },
+  buttonContainer:{
+    flexDirection:"row",
+    justifyContent:'space-around'
   }
 })
 

@@ -1,28 +1,31 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Modal, Text, Pressable, View} from 'react-native';
 
-import styles from './style';
+import UserContext from '../../pages/UserContext';
+
+import {styles} from './style';
 
 const ModalAlert = ({ modalVisible, setModalVisible, modalAlert }) => {
   
+  const {theme} = useContext(UserContext)
 
+  
   return (
-    <View style={styles.centeredView}>
+    <View style={styles(theme).centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-         // Alert.alert('Modal has been closed.');
+        onRequestClose={() => {        
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{modalAlert}</Text>
+        <View style={styles(theme).centeredView}>
+          <View style={styles(theme).modalView}>
+            <Text style={styles(theme).modalText}>{modalAlert}</Text>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles(theme).button, styles(theme).buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Fechar</Text>
+              <Text style={styles(theme).textStyle}>Fechar</Text>
             </Pressable>
           </View>
         </View>
@@ -38,9 +41,9 @@ export default ModalAlert;
 /*
 import ModalAlert from '../../components/ModalAlert';
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
   const [modalAlert, setModalAlert] = useState('')
   
-<ModalAlert modalVisible={modalVisible} setModalVisible={setModalVisible} modalAlert={modalAlert} />
+<ModalAlert modalVisible={modalVisibleAlert} setModalVisible={setModalVisibleAlert} modalAlert={modalAlert} />
 
 */

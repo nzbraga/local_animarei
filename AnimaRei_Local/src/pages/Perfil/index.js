@@ -1,29 +1,34 @@
 import React, { useState, useContext } from 'react'
-import { View, StatusBar, Text, Image, TextInput, Alert, Pressable, ScrollView } from 'react-native'
+import { View, StatusBar, Text, Image, TextInput, Alert, Pressable, ScrollView, Keyboard } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 
-import { deleteUser, loadUserData, updateUserNameById,
-updateUserPasswordById, updateUserImageById } from '../../service/local/user';
+import {
+  deleteUser, loadUserData, updateUserNameById,
+  updateUserPasswordById, updateUserImageById
+} from '../../service/local/user';
 
-import { allKeys, removeFavList} from '../../service/local/favorite';
-import validationNewUser from '../../service/validation/newUser'
+import { removeFavList } from '../../service/local/favorite';
 import validationLogin from '../../service/validation/login'
+import validationNewUser from '../../service/validation/newUser'
 import validationPassword from '../../service/validation/password'
 
 import UserContext from '../UserContext';
 import Header from '../../components/Header'
 import Version from '../../components/Version';
 
+import ModalAlert from '../../components/ModalAlert';
+
 import { useNavigation } from '@react-navigation/native';
 
-import styles from './style'
+import { styles } from './style'
+import ModalConfirm from '../../components/ModalConfirm';
 
-const Details = ({ route }) => {
+const Perfil = () => {
 
   const navigation = useNavigation()
 
-  const { user, setUser, userImage, setUserImage, currentId } = useContext(UserContext)
-  
+  const { user, setUser, userImage, setUserImage, currentId, theme } = useContext(UserContext)
+
   const [newUser, setNewUser] = useState(user)
   const [password, setPassword] = useState('')
 
@@ -31,31 +36,41 @@ const Details = ({ route }) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [hideNewSenha, setHideSenha] = useState(true)
   const [image, setImage] = useState(userImage);
-  
 
-  function handlePickImage(name, password){ 
+  const [modalVisibleAlert, setModalVisibleAlert] = useState(false);
+  const [modalVisibleConfirm, setModalVisibleConfirm] = useState(false);
 
-      loadUserData(name, password).then((res) => {
-        if (res) {
-          pickImage()
-        }
-      setPassword('')  
-      })
-    
-      
-  }
+  const [infoData, setInfoData] = useState({})
+  const [modalAlert, setModalAlert] = useState('')
+  const [modalText, setModalText] = useState('')
 
-  const saveImage = async (userId, uri) => {
-  
-    updateUserImageById(userId, uri).then((res)=>{
-      if(res){
-       
-        Alert.alert('Atualizado com sucesso!')
+
+  function handlePickImage(name, password) {
+    console.log("🚀 ~ handlePickImage ~ name:", name)
+
+    loadUserData(name, password).then((res) => {
+      console.log("🚀 ~ loadUserData ~ res:", res)
+      if (res) {
+        pickImage()
       }
-    }) 
-    
-  }     
+      setPassword('')
+    })
 
+
+  }
+  const saveImage = async (userId, uri) => {
+
+    updateUserImageById(userId, uri).then((res) => {
+      console.log("🚀 ~ updateUserImageById ~ res:", res)
+
+      if (res) {
+
+        Alert.warn('Atualizado com sucesso!')
+      }
+
+    })
+
+  }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -72,98 +87,144 @@ const Details = ({ route }) => {
       setUserImage(result.assets[0].uri)
     }
   }
-
+  function handleModal() {
+    setModalText(`Deseja Remover Usuario
+e sua lista de favoritos?
+Não será possivel recuperar essas informações!`)
+    setModalVisibleConfirm(true)
+  }
   function handleDeleteUser(name, password) {
 
-    Alert.alert('Excluir Usuario?', `Deseja Remover Usuario e sua lista de favoritos? Não será possivel recuperar essas informações!`,
-      [{
-        text: 'Yes', onPress: () => {
-          validationLogin(name, password).then(()=>{
-
-            loadUserData(name, password).then((res) => {
-              if (res) {
-                removeFavList(res.id)
-                deleteUser(res.id).then(() => {
-                  navigation.navigate('Login')
-                })
-              }
-              
-            })
+    validationLogin(name, password).then((res) => {
+      //console.log("🚀 ~ validationLogin ~ res:", res)
+      if (!res.status) {
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
+      }
+      
+      loadUserData(name, password).then((res) => {
+        if (!res.status) {
+          setModalAlert(res.msg)
+          setModalVisibleAlert(true)
+        }
+        if (res.status) {
+          removeFavList(res.data.id)
+          deleteUser(res.data.id).then(() => {
+          navigation.navigate('Login')
           })
         }
-      }, { text: 'No' },],
-      { cancelable: false }
-    );
+
+      })
+
+
+    })
 
   }
+  function handleNewUserName(user, newUser, password) {
+    // validar inputs
+    validationNewUser(user, newUser, password).then((res) => {
+      // console.log("🚀 ~ validationNewUser ~ res:", res)
+      if (!res.status) {
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
+        return
+      }
 
- function handleNewUserName(user, newUser, password) {
-       // validar inputs
-    validationNewUser(user, newUser, password).then((valid) => {           
-        if (valid) {
-          //confirmar senha e atualizar nome
-          loadUserData(user, valid.password).then((res)=>{          
-            updateUserNameById(res.id, newUser).then((res)=>{
-              if(res){
-                setUser(newUser)
-                Alert.alert('Atualizado com sucesso!')
-              }
-            })
+      if (res.status) {
+        //confirmar senha e atualizar nome
+        loadUserData(user, password).then((res) => {
+          console.log("🚀Perfil ~ loadUserData ~ res:", res)
+          if (!res.status) {
+            setModalAlert(res.msg)
+            setModalVisibleAlert(true)
+            return
+          }
+
+          updateUserNameById(res.data.id, newUser).then((res) => {
+            console.log("🚀 ~ updateUserNameById ~ res:---", res)
+
+            if (res.status) {
+              setUser(newUser)
+              setPassword('')
+              setModalAlert(res.msg)
+              setModalVisibleAlert(true)
+            }
+
           })
-        }
-      
+
+        })
+      }
+
+    })
+  }
+  function handleNewPassword(user, password, newPassword, confirmPassword) {
+
+    // validar inputs
+    validationPassword(user, newPassword, confirmPassword).then((res) => {
+      console.log("🚀 ~ validationPassword ~ res:", res)
+      if (!res.status) {
+        setModalAlert(res.msg)
+        setModalVisibleAlert(true)
+        return
+      }
+
+      if (res.status) {
+        //confirmar senha e atualizar senha
+        loadUserData(user, password).then((res) => {
+          console.log("🚀handlePass ~ loadUserData ~ res:", res)
+          if (!res.status) {
+            setModalAlert(res.msg)
+            setModalVisibleAlert(true)
+            return
+          }
+
+          updateUserPasswordById(res.data.id, newPassword).then((res) => {
+            console.log("🚀 ~ updateUserPasswordById ~ res:", res)
+
+            if (res.status) {
+              setModalAlert(res.msg)
+              setModalVisibleAlert(true)
+            }
+
+          })
+        })
+      }
+
+
     })
   }
 
-  function handleNewPassword(user, password, newPassword, confirmPassword ) {
-       // validar inputs
-       validationPassword(user, newPassword, confirmPassword).then((valid) => {           
-        if (valid) {
-          //confirmar senha e atualizar senha
-          loadUserData(user, password).then((res)=>{     
-            console.log("handleNewPass", res)     
-            updateUserPasswordById(res.id, newPassword).then((res)=>{              
-              if(res){                
-                Alert.alert('Atualizado com sucesso!')
-              }
-            })
-          })
-        }
-      
-    })
-  }
- 
   return (
 
-    <View style={styles.container}>
+    <View style={styles(theme).container}>
       <StatusBar />
-      <Header />
-      <ScrollView style={styles.scrollView}>
+      <Header page='Perfil' />
+      <ScrollView style={styles(theme).scrollView}>
         {!hideNewSenha ? '' :
           <View>
             <Pressable onPress={() => handlePickImage(user, password)}>
               <Image
-                style={styles.image}
+                style={styles(theme).image}
                 source={image ? { uri: image } : require('../../components/img/icon-anima.jpg')}
               />
             </Pressable>
-            <Text style={styles.text}>Nome de Usuario</Text>
+            <Text style={styles(theme).text}>Nome de Usuario</Text>
             <TextInput
-              style={styles.input}
+              style={styles(theme).input}
               value={newUser}
               onChangeText={(e) => setNewUser(e)}
             />
-            <Text style={styles.text}>Senha:</Text>
+            <Text style={styles(theme).text}>Senha:</Text>
             <TextInput
-              style={styles.input}
+              style={styles(theme).input}
               secureTextEntry={true}
               value={password}
               onChangeText={(e) => setPassword(e)}
             />
-            <View style={styles.containerInput}>
+            <View style={styles(theme).containerInput}>
               <Pressable
 
-                style={styles.button}
+                style={styles(theme).button}
                 onPress={() => handleNewUserName(user, newUser, password)}
               >
 
@@ -174,8 +235,8 @@ const Details = ({ route }) => {
 
               <Pressable
 
-                style={styles.buttonRed}
-                onPress={() => handleDeleteUser(user, password)}
+                style={styles(theme).buttonRed}
+                onPress={() => handleModal()}
               >
 
                 <Text>
@@ -185,7 +246,7 @@ const Details = ({ route }) => {
 
               <Pressable
 
-                style={styles.button}
+                style={styles(theme).button}
                 onPress={() => setHideSenha(false)}
               >
 
@@ -200,31 +261,31 @@ const Details = ({ route }) => {
 
         {hideNewSenha ? '' :
           <>
-            <Text style={styles.text}>Senha Atual:</Text>
+            <Text style={styles(theme).text}>Senha Atual:</Text>
             <TextInput
-              style={styles.input}
+              style={styles(theme).input}
               secureTextEntry={true}
               value={password}
               onChangeText={(e) => setPassword(e)}
             />
-            <Text style={styles.text}>Nova Senha:</Text>
+            <Text style={styles(theme).text}>Nova Senha:</Text>
             <TextInput
-              style={styles.input}
+              style={styles(theme).input}
               secureTextEntry={true}
               value={newPassword}
               onChangeText={(e) => setNewPassword(e)}
             />
-            <Text style={styles.text}>Confirmar Nova Senha:</Text>
+            <Text style={styles(theme).text}>Confirmar Nova Senha:</Text>
             <TextInput
-              style={styles.input}
+              style={styles(theme).input}
               secureTextEntry={true}
               value={confirmPassword}
               onChangeText={(e) => setConfirmPassword(e)}
             />
-            <View style={styles.containerInput}>
+            <View style={styles(theme).containerInput}>
 
               <Pressable
-                style={styles.button}
+                style={styles(theme).button}
                 onPress={() => handleNewPassword(user, password, newPassword, confirmPassword)}
               >
                 <Text>
@@ -232,7 +293,7 @@ const Details = ({ route }) => {
                 </Text>
               </Pressable>
               <Pressable
-                style={styles.button}
+                style={styles(theme).button}
                 onPress={() => setHideSenha(true)}
               >
                 <Text>
@@ -242,6 +303,8 @@ const Details = ({ route }) => {
             </View>
           </>
         }
+        <ModalAlert modalVisible={modalVisibleAlert} setModalVisible={setModalVisibleAlert} modalAlert={modalAlert} />
+        <ModalConfirm modalVisible={modalVisibleConfirm} setModalVisible={setModalVisibleConfirm} modalText={modalText} action={() => handleDeleteUser(user, password)} infoData={infoData} />
 
       </ScrollView>
       <Version />
@@ -251,4 +314,4 @@ const Details = ({ route }) => {
   );
 }
 
-export default Details;
+export default Perfil;

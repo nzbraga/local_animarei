@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
 
 //salvar nova lista
 export const storageFavoriteData = async (userId, newFavoriteData) => {
@@ -63,18 +62,21 @@ export const upFavorite = async (userId, id, action, note, current, episodes) =>
   try {
     let userData = await AsyncStorage.getItem(`@Fav${userId}`);
     if (userData !== null) {
+      //console.log("🚀 ~ upFavorite ~ userData:", userData)
       userData = JSON.parse(userData);
       switch (action) {
         case '+':
           if (userData[id].currentEpisode < userData[id].episodes) {
             userData[id].currentEpisode += 1
             await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+            return {status: true}
           }
           break;
         case '-':
           if (userData[id].currentEpisode > 0) {
             userData[id].currentEpisode -= 1
             await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+            return {status: true}
           }
           break;
         case 'edit':
@@ -82,50 +84,57 @@ export const upFavorite = async (userId, id, action, note, current, episodes) =>
             userData[id].note = note
             userData[id].episodes = episodes
             userData[id].currentEpisode = current
-            await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
-
-            let res = { status: true, msg: "Atualizado com sucess" }
-            return res
-
-          } 
-          if(userData[id].currentEpisode > userData[id].episodes && current > episodes) {
-            let res = { status: true, msg: "Episodio Atual nao pode ser maior que o numero de Episodios" }
-            return res
+            await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));            
+            return { status: true, msg: "Atualizado com sucesso" }
+            
+          } else{
+            return { status: false, msg: "Os episodios assistidos nao pode ser maior que os episodeios totais" }
           }
-          console.log("edit upFav - CONFERIR LOGICA MODIFICADA")
+           
+          //console.log("edit upFav - CONFERIR LOGICA MODIFICADA")
           break;
         case 'complite':
           userData[id].currentEpisode = userData[id].episodes
-          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData))
+          
+            return {status: true}
+            break;
+            
+            case 'clear':
+              userData[id].currentEpisode = 0
+              await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+              return {status: true}
+
           break;
-        case 'clear':
-          userData[id].currentEpisode = 0
-          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
-          break;
-        case 'delete':
-          // Remover o item do array
-          userData.splice(id, 1);
-          await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
-          break;
+          case 'delete':
+            // Verificar se userData é um array e se id é um índice válido
+            if (Array.isArray(userData) && id >= 0 && id < userData.length) {
+                // Remover o item do array
+                userData.splice(id, 1);
+               // console.log("🚀 ~ upFavorite ~ userData:", userData);
+                await AsyncStorage.setItem(`@Fav${userId}`, JSON.stringify(userData));
+                return{ status: true }
+            } else {
+                console.log("Erro: índice inválido ou userData não é um array");
+            }
+            break;
 
         default:
-        console.log('action necessario')
+         return { status: false, msg: "Ação não definida" }
       }
 
     } else {
       // Se não houver dados para esse usuário
     
-      let res = { status: false, msg: "Usuário não encontrado" }
-      return res
-      
+
+      return { status: false, msg: "Usuário não encontrado" }
     }
   } catch (error) {
     //console.error('Erro ao atualizar favorito: ', error.message);
-    let res = { status: false, msg: "Erro ao atualizar favorito" }
-    return res
-  }
+    
+    return { status: false, msg: "Erro ao atualizar favorito" }
 };
-
+}
 export const removeFavList = async (userId) => {
   try {
     AsyncStorage.removeItem(`@Fav${userId}`)

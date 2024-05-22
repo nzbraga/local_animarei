@@ -1,17 +1,16 @@
 import { StyleSheet } from "react-native";
+import { getColor }  from '../../components/Style/colors'
 
-import  { colors }  from '../../components/Style/colors'
-
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   container: {   
-    backgroundColor: colors.darkPry,
+    backgroundColor: getColor(theme).oppBase,
     height:"100%",
     zIndex:-1
   },
   textZap:{
     fontSize:20,
     textAlign:'center',
-    color: colors.backSec
+    color: getColor(theme).neut
   },
   imageZap: {
     width: 30,

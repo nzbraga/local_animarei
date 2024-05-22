@@ -1,9 +1,7 @@
-import { StyleSheet } from 'react-native';
-import  { colors }  from '../Style/colors';
+import { StyleSheet } from "react-native";
+import { getColor } from "../../components/Style/colors";
 
-
-export default StyleSheet.create({
-
+export const styles = (theme) => StyleSheet.create({
   
   container: {
     position: 'absolute',
@@ -19,7 +17,7 @@ export default StyleSheet.create({
     borderRadius: 25,
     padding:3,
     margin:3,
-    backgroundColor: colors.darkPry, 
-    color: colors.backSec,
+    backgroundColor: getColor(theme).oppBase, 
+    color: getColor(theme).neut,
   },
 })

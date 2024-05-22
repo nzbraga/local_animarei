@@ -3,13 +3,13 @@ import { View, TextInput, Pressable, Text, ActivityIndicator, Alert, FlatList, I
 import { useNavigation } from "@react-navigation/native";
 
 import UserContext from '../../pages/UserContext'
-import styles from "./style";
+import {styles} from "./style";
 import { storageFriendData, loadFriendData } from "../../service/local/friend";
 import { findUserByName, findUserById } from '../../service/local/user'
 
 function FriendAPI() {
   const navigation = useNavigation();
-  const { user, currentId } = useContext(UserContext)
+  const { currentId, theme } = useContext(UserContext)
   const [search, setSearch] = useState('');
   const [friend, setFriend] = useState(null);
   const [data, setData] = useState([]);
@@ -45,13 +45,13 @@ function FriendAPI() {
 
   return (
     <View>
-      <View style={styles.container}>
-        <View style={styles.textContainer}>
-          <Pressable style={styles.button} onPress={() => handleFriendData(search)}>
-            <Text style={styles.buttonText}>Buscar</Text>
+      <View style={styles(theme).container}>
+        <View style={styles(theme).textContainer}>
+          <Pressable style={styles(theme).button} onPress={() => handleFriendData(search)}>
+            <Text style={styles(theme).buttonText}>Buscar</Text>
           </Pressable>
           <TextInput
-            style={styles.textInput}
+            style={styles(theme).textInput}
             value={search}
             onChangeText={(v) => setSearch(v)}
             placeholder='Buscar por um Amigo'
@@ -59,14 +59,14 @@ function FriendAPI() {
         </View>
       </View>
 
-      <View style={styles.loading}>
+      <View style={styles(theme).loading}>
         {isLoading ? <ActivityIndicator size="large" color="green" /> :
           <View>
             {friend && (
               <View>
-                <Pressable style={styles.button} onPress={() => handleAddFriend(currentId, friend.id)}>
+                <Pressable style={styles(theme).button} onPress={() => handleAddFriend(currentId, friend.id)}>
                   <Image
-                    style={styles.image}
+                    style={styles(theme).image}
                     source={friend.image ? { uri: friend.image } : require('../../components/img/icon-anima.jpg')}
                   />
                   <Text>{friend.name} ♥️</Text>
@@ -117,7 +117,7 @@ function FriendItem({ id }) {
     <View>
       <Text style={{ color: 'white' }}>{userData.name}</Text>
       <Image
-        style={styles.image}
+        style={styles(theme).image}
         source={userData.image ? { uri: userData.image } : require('../../components/img/icon-anima.jpg')}
       />
       <Text style={{ color: 'white' }}>{userData.email}</Text>

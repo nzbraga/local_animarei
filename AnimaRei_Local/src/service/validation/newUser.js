@@ -22,7 +22,7 @@ export default async function validationUser(name, newName, password) {
 
     }
 
-    const newUser = { name, password: password, newName };
+    const newUser = { name, password, newName };
     //console.log("validationUser", newUser)
    
     let res = {data: newUser , status:true , msg:'Usuário não encontrado'}

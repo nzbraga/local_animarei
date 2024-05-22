@@ -1,55 +1,53 @@
 import { StyleSheet } from 'react-native';
-import  { colors }  from '../Style/colors'
+import { getColor } from '../Style/colors'
 
-export default StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        //justifyContent: 'center',
-        alignItems: 'center',             
-        backgroundColor: '(rgba(0,0,0,0.7))', 
-        top: -25, 
-        position: 'absolute'
+export const styles = (theme) => StyleSheet.create({
+ 
+  centeredView: {
+    flex: 1, 
+    alignItems: 'center',
+   // backgroundColor: '(rgba(0,0,0,0.9))',
+    top: -25,  
+  },
+  modalView: {
+    width: 350,
+    backgroundColor: getColor(theme).oppBase,
+    margin: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    borderColor: getColor(theme).base,
+    borderWidth: 1,
+    padding: 35,
+    shadowColor: getColor(theme).base,
+    shadowOpacity: 0.5,
+    elevation: 30,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    paddingHorizontal: 15,
+    elevation: 20,
+    margin:5
+  },
 
-      },
-      modalView: {
-        width:350,
-        backgroundColor:colors.darkPry,      
-        margin: 20,
-        //backgroundColor: 'white',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderColor: colors.primary,
-        borderWidth:1,
-        padding: 35,       
-        shadowColor: colors.primary,      
-        shadowOpacity: 0.5,      
-        elevation: 30,
-      },
-      button: {
-        borderRadius: 20,
-        padding: 10,
-        paddingHorizontal: 15,
-        elevation: 20,
-        backgroundColor: colors.primary,
-        color: colors.darkPry,
-        margin:10
-      },
-      
-      buttonClose: {
-        backgroundColor: colors.alert,
-      },
-      textStyle: {
-        color: colors.light,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        fontSize:20
-      },
-      modalText: {
-        color: colors.light,        
-        marginBottom: 15,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize:20
-      },
+  buttonConfirm: {
+    backgroundColor: getColor(theme).base,
+  },
+  buttonClose: {
+    backgroundColor: getColor(theme).warn,
+  },
+  textStyle: {
+    color: getColor(theme).oppSec,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 20
+  },
+  modalText: {
+    color: getColor(theme).oppNeut,
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20
+  },
 
 })

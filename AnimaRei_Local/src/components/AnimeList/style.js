@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
-import  { colors }  from "../Style/colors";
+import { getColor }  from "../Style/colors";
 
-export default StyleSheet.create({
+export const styles = (theme) => StyleSheet.create({
   container: {
-    backgroundColor: colors.backSec,
+    backgroundColor: getColor(theme).neut,
     zIndex:-1
     
   },
   itemContainer: {
-    backgroundColor: colors.darkPry,
+    backgroundColor: getColor(theme).oppBase,
     paddingVertical: 10,     
   },
   image: {
@@ -26,21 +26,21 @@ export default StyleSheet.create({
     bottom: 0,   
     paddingTop:10,
     paddingBottom:10,
-    backgroundColor: '(rgba(0,0,0,0.7))',   
+    backgroundColor: '(rgba(0,0,0,0.9))',   
     borderBottomWidth:3,
-    borderBottomColor: colors.primary
+    borderBottomColor: getColor(theme).base
   },  
   titleText:{
     fontSize: 20,
     alignSelf: "center",
     textAlign: "center",
     width: '80%',
-    color: colors.backSec
+    color: getColor(theme).light
   },
   episodeText: {
     fontSize: 15,
     textAlign: "center",
-    color: colors.backSec
+    color: getColor(theme).light
        
   },
   starContainer: {
